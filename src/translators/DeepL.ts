@@ -1,6 +1,7 @@
 import axios from "axios";
 import type LangCodeRecord from "../langCodes/LangCodeRecord";
 import type Translator from "./Translator";
+import { commonLangs } from "../langCodes/CommonLangs";
 
 export default class DeepL implements Translator {
     
@@ -31,6 +32,7 @@ export default class DeepL implements Translator {
     }
 
     async getAllFromLangs(): Promise<Array<LangCodeRecord>> {
+        const commonLangCodes = commonLangs.map(el => el.lang);
 
         const endPoint = this.origin + "/v2/languages" + "?type=source";
         const apikey = process.env.DEEPL_KEY;
@@ -48,12 +50,13 @@ export default class DeepL implements Translator {
                 lang: el.language,
                 name: el.name,
             };
-        });
+        }).filter(el => commonLangCodes.includes(el.lang));
 
         return languages;
     }
     
     async getAllToLangs(): Promise<Array<LangCodeRecord>> {
+        const commonLangCodes = commonLangs.map(el => el.lang);
 
         const endPoint = this.origin + "/v2/languages" + "?type=target";
         const apikey = process.env.DEEPL_KEY;
@@ -68,10 +71,10 @@ export default class DeepL implements Translator {
 
         const languages : Array<LangCodeRecord> = (data as Array<DeepLLanguagesResponseRecord>).map(el => {
             return {
-                lang: el.language,
+                lang: el.language.toLowerCase(),
                 name: el.name,
             };
-        });
+        }).filter(el => commonLangCodes.includes(el.lang));
 
         return languages;
     }

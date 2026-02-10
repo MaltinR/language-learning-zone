@@ -14,8 +14,8 @@ async function test() {
         console.log(`ToLangs: ${toLangs.length}`);
 
         const testText = "Aku muak dengan hal ini.";
-        const testFromLang = "ID"; // Not decided the standard yet
-        const testToLang = "EN"; // Not decided the standard yet
+        const testFromLang = "id";
+        const testToLang = "ja";
         const translation = await translator.translate(testText, testFromLang, testToLang);
         console.assert(translation != null);
         console.log(`Translation: '${translation}'`);

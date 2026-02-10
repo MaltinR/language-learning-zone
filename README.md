@@ -2,6 +2,7 @@
 
 ## Roadmap
 - [ ] Standardize lang code
+- [ ] Docker support
 
 
 To install dependencies:
