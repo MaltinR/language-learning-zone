@@ -1,15 +1,17 @@
-import { Tatoeba } from "../../src/sourceProviders/Tatoeba";
+import Tatoeba from "../../src/sourceProviders/Tatoeba";
 
 async function test() {
   try {
     const source = new Tatoeba();
 
-    const locales = await source.getAllLocales();
-    console.assert(locales != null);
-    console.log(`Locales count: ${locales.length}`);
-    
-    const locale = "ind";
-    const text = await source.next(locale);
+    const langs = await source.getAllLangs();
+    console.assert(langs != null);
+    console.log(`Locales count: ${langs.length}`);
+    // const locale = 
+
+    const lang = langs[randomInt(0, langs.length)];
+    console.log(`Locale: '${lang!.lang}' (${lang!.name})`);
+    const text = await source.next(lang!.lang);
     console.assert(text != null);
     console.log(`Text: '${text}'`);
   } catch (e: any) {
@@ -17,5 +19,8 @@ async function test() {
   }
 }
 
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 await test();

@@ -1,0 +1,1 @@
+You will receive a text in {textLang}, translate the given text to {explainLang}, without any explanation.

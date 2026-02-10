@@ -1,5 +1,5 @@
-import type LocaleProvider from "../LocaleProvider";
+import type LangCodeProvider from "../langCodes/LangCodeProvider";
 
-export default interface SourceProvider extends LocaleProvider{
+export default interface SourceProvider extends LangCodeProvider{
     next(locale: string): Promise<string>;
 }
