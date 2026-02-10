@@ -1,7 +1,8 @@
 # Language Learning Zone
 
 ## Roadmap
-- [ ] Standardize lang code
+- [x] Standardize lang code
+- [ ] Web frontend
 - [ ] Docker support
 
 
@@ -11,8 +12,8 @@ To install dependencies:
 bun install
 ```
 
-To run:
+To run server:
 
 ```bash
-bun run index.ts
+bun run ./src/server.ts
 ```
