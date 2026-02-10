@@ -4,10 +4,15 @@ import type Translator from "./Translator";
 import { commonLangs } from "../langCodes/CommonLangs";
 
 export default class DeepL implements Translator {
+
+    name: string;
+    id: string;
     
     origin: string;
     constructor(isFree: boolean = true){
         this.origin = isFree ? "https://api-free.deepl.com" : "https://api.deepl.com";
+        this.name = "DeepL";
+        this.id = "deep_l";
     }
 
     async translate(text: string, fromLang: string, toLang: string): Promise<string> {
@@ -47,7 +52,7 @@ export default class DeepL implements Translator {
 
         const languages : Array<LangCodeRecord> = (data as Array<DeepLLanguagesResponseRecord>).map(el => {
             return {
-                lang: el.language,
+                lang: el.language.toLowerCase(),
                 name: el.name,
             };
         }).filter(el => commonLangCodes.includes(el.lang));

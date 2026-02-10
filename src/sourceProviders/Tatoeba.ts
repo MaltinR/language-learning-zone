@@ -5,11 +5,18 @@ import type LangCodeProvider from "../langCodes/LangCodeRecord";
 import { commonLangs } from "../langCodes/CommonLangs";
 
 export default class Tatoeba implements SourceProvider {
-  constructor() {}
+
+  id: string;
+  name: string;
+  constructor() {
+    this.id = "tatoeba";
+    this.name = "Tatoeba";
+  }
 
   async next(lang: string): Promise<string> {
+    const localCode = langToLocalCode(lang);
     // https://tatoeba.org/en/sentences/random
-    const endPoint = `https://tatoeba.org/en/sentences/random/${lang}`;
+    const endPoint = `https://tatoeba.org/en/sentences/random/${localCode}`;
     const res = await axios.get(endPoint);
     const data = res.data as TatoebaResponse;
 
@@ -42,8 +49,8 @@ export default class Tatoeba implements SourceProvider {
     return languages;
   }
 }
-function localCodeToLang(lang: string): string {
-  switch (lang) {
+function localCodeToLang(localCode: string): string {
+  switch (localCode) {
     case "ara":
       return "ar";
     case "bul":
@@ -111,7 +118,7 @@ function localCodeToLang(lang: string): string {
     case "cmn":
       return "zh";
     default:
-      throw new Error(`Not support: '${lang}'`);
+      throw new Error(`Not support: '${localCode}'`);
   }
 }
 

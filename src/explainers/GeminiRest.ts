@@ -3,10 +3,15 @@ import type Explainer from "./Explainer";
 import * as utils from "./utils";
 
 export default class GeminiRest implements Explainer {
+
+  id: string;
+  name: string;
   useStream: boolean;
   origin: string;
 
   constructor(useStream: boolean = false) {
+    this.id = "gemini_rest";
+    this.name = "Gemini";
     this.useStream = useStream;
     this.origin = "https://generativelanguage.googleapis.com";
   }

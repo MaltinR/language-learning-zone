@@ -14,11 +14,14 @@ async function test(targetLang: string, translateLang: string) {
 
     const translatorLangs = await translator.getAllFromLangs();
     const intersectedLangs = sourceLangs.filter(el => translatorLangs.some(lang => el.lang == lang.lang));
+    console.log(`sourceLangs: ${sourceLangs.length}`);
+    console.log(`translatorLangs: ${translatorLangs.length}`);
+    console.log(`intersectedLangs: ${intersectedLangs.length}`);
     const lang = intersectedLangs[randomInt(0, intersectedLangs.length)];
     console.log(`Lang: ${lang!.lang}(${lang!.name})`);
     const text = await source.next(lang!.lang);
     console.log(`Text: ${text}`);
-    const translation = translator.translate(text, lang!.lang, translateLang);
+    const translation = await translator.translate(text, lang!.lang, translateLang);
     console.log(`Translation: ${translation}`);
 }
 
