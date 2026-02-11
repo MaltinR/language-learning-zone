@@ -5,7 +5,6 @@ import type LangCodeProvider from "../langCodes/LangCodeRecord";
 import { commonLangs } from "../langCodes/CommonLangs";
 
 export default class Tatoeba implements SourceProvider {
-
   id: string;
   name: string;
   constructor() {
@@ -45,7 +44,9 @@ export default class Tatoeba implements SourceProvider {
           return null;
         }
       })
-      .filter((el) => el != null && commonLangCodes.includes(el.lang)) as Array<LangCodeProvider>;
+      .filter(
+        (el) => el != null && commonLangCodes.includes(el.lang),
+      ) as Array<LangCodeProvider>;
     return languages;
   }
 }
@@ -117,6 +118,10 @@ function localCodeToLang(localCode: string): string {
       return "vi";
     case "cmn":
       return "zh";
+    case "yue":
+      return "yue";
+    case "zsm":
+      return "ms";
     default:
       throw new Error(`Not support: '${localCode}'`);
   }
@@ -190,6 +195,10 @@ function langToLocalCode(lang: string): string {
       return "vie";
     case "zh":
       return "cmn";
+    case "yue":
+      return "yue";
+    case "ms":
+      return "zsm";
     default:
       throw new Error(`Not support: '${lang}'`);
   }
