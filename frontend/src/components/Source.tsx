@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Button from "./Button";
 import Dropdown from "./Dropdown";
 import type IdText from "../interfaces/IdText";
+import type Lang from "../interfaces/Lang";
 
 async function initFetch(
   setSourceProviders: React.Dispatch<React.SetStateAction<SourceProvider[]>>,
@@ -30,11 +31,6 @@ interface SourceProvider {
   langs: Array<Lang>;
 }
 
-interface Lang {
-  lang: string;
-  name: string;
-}
-
 interface NextRequest {
   lang: string;
 }
@@ -50,7 +46,7 @@ interface NextResponse {
   result: string;
 }
 
-function Source() {
+function Source({ onTextUpdated }: { onTextUpdated: (text: string) => void }) {
   const [sourceProviders, setSourceProviders] = useState<Array<SourceProvider>>(
     [],
   );
@@ -60,6 +56,17 @@ function Source() {
   const [currentSourceProvider, setCurrentSourceProvider] =
     useState<SourceProvider | null>(null);
   const [currentLang, setCurrentLang] = useState<Lang | null>(null);
+
+  const sourceProviderOptions: Array<IdText> = useMemo(() => {
+    return sourceProviders.map((sourceProvider) => ({
+      id: sourceProvider.id,
+      text: sourceProvider.name,
+    }));
+  }, [sourceProviders]);
+
+  const langOptions: Array<IdText> = useMemo(() => {
+    return langs.map((lang) => ({ id: lang.lang, text: lang.name }));
+  }, [langs]);
 
   const onClick = useCallback(async () => {
     if (isFetching) return;
@@ -79,7 +86,13 @@ function Source() {
     } finally {
       setIsFetching(false);
     }
-  }, [setGeneratedText, currentLang, currentSourceProvider]);
+  }, [
+    setIsFetching,
+    setGeneratedText,
+    isFetching,
+    currentLang,
+    currentSourceProvider,
+  ]);
 
   const onSourceProviderSelect = useCallback(
     (id: string) => {
@@ -104,20 +117,13 @@ function Source() {
     [setGeneratedText],
   );
 
-  const sourceProviderOptions: Array<IdText> = useMemo(() => {
-    return sourceProviders.map((sourceProvider) => ({
-      id: sourceProvider.id,
-      text: sourceProvider.name,
-    }));
-  }, [sourceProviders]);
-
-  const langOptions: Array<IdText> = useMemo(() => {
-    return langs.map((lang) => ({ id: lang.lang, text: lang.name }));
-  }, [langs]);
-
   useEffect(() => {
     initFetch(setSourceProviders, setLangs, setCurrentSourceProvider);
   }, []);
+
+  useEffect(() => {
+    onTextUpdated(generatedText);
+  }, [generatedText]);
 
   return (
     <div className="flex-1 h-full flex flex-col">
@@ -125,21 +131,23 @@ function Source() {
         <div className="text-white px-6 py-3 font-bold text-xl">Source</div>
         <div className="pr-4">
           <Dropdown
-            className="bg-stone-800 rounded text-white p-1 focus:outline-none mx-2"
+            className="bg-stone-800 rounded text-white p-1 w-37.5 focus:outline-none mx-2"
             onSelect={onSourceProviderSelect}
             options={sourceProviderOptions}
+            value={currentSourceProvider?.id ?? ""}
           />
           <Dropdown
-            className="bg-stone-800 rounded text-white p-1 focus:outline-none"
+            className="bg-stone-800 rounded text-white p-1 w-37.5 focus:outline-none"
             onSelect={onLangSelect}
             options={langOptions}
+            value={currentLang?.lang ?? ""}
           />
         </div>
       </div>
       <div className="flex-1 px-6 py-3 flex flex-col justify-between">
         <div className="text-white flex-1 flex">
           <div
-            className={`bg-stone-800 flex flex-1 mt-2 mb-4 rounded-md border-2${isFetching ? " text-emerald-600" : " text-stone-800"}`}
+            className={`bg-stone-800 flex flex-1 mt-2 mb-4 rounded-md border-2 ${isFetching ? "text-emerald-600" : "text-stone-800"}`}
           >
             <textarea
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
