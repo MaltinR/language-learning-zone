@@ -51,6 +51,7 @@ export default class GeminiRest implements Explainer {
       const decoder = new TextDecoder();
 
       let fullText = "";
+      const startTime = Date.now();
       for await (const chunk of stream) {
         const text = decoder.decode(chunk);
         const lines = text.split("\n");
@@ -62,6 +63,7 @@ export default class GeminiRest implements Explainer {
               const content = json.candidates?.[0]?.content?.parts?.[0]?.text;
               if (content) {
                 fullText += content;
+                console.log(`[${Date.now() - startTime}] ${content}`);
                 onTextUpdate?.(content);
               }
             } catch (e) {

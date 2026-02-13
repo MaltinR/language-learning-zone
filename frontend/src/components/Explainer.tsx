@@ -109,10 +109,12 @@ function Explainer({
     async (text: string, inputText: string) => {
       if (isFetching) return;
       const freezedMessages : Array<MessageData> = [...messages];
-      if (inputText != null) freezedMessages.push({role: "user", text: inputText});
+      if (inputText != null && inputText != "") freezedMessages.push({role: "user", text: inputText});
       const payloadMessages : Array<MessageData> = inputText != "" ? [...messages, {role: "user", text }, {role: "user", text: inputText}] : [...messages];
       console.log(freezedMessages);
 
+      // Debug
+      const start = Date.now();
       const updateText = (fullText: string) => {
         setMessages([
           ...freezedMessages,
@@ -150,7 +152,7 @@ function Explainer({
         let fullText = "";
 
         const handleResponse = (response: ExplainResponse) => {
-          console.log("Received:", response);
+          console.log("Received:", (Date.now() - start).toString(), response);
           if (response.type === "deltaText") {
             fullText += response.deltaText;
             updateText(fullText);

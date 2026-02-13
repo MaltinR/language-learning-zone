@@ -19,7 +19,7 @@ export default class DeepL implements Translator {
         
         const endPoint = this.origin + "/v2/translate";
         const apikey = process.env.DEEPL_KEY;
-        
+
         const body = {
             text: [text],
             source_lang: fromLang,
@@ -72,14 +72,25 @@ export default class DeepL implements Translator {
             }
         });
 
-        const data = res.data;
+        const data : Array<DeepLLanguagesResponseRecord> = res.data;
 
-        const languages : Array<LangCodeRecord> = (data as Array<DeepLLanguagesResponseRecord>).map(el => {
+        const records : Array<LangCodeRecord> = data.map(el => {
             return {
                 lang: el.language.toLowerCase(),
                 name: el.name,
             };
-        }).filter(el => commonLangCodes.includes(el.lang));
+        });
+
+        // If doesn't have direct english, use en-us
+        if (!records.some(el => el.lang === "en"))
+        {
+            const usRecord = records.find(el => el.lang === "en-us");
+            if (usRecord != null) {
+                usRecord.lang = "en";
+            }
+        }
+
+        const languages : Array<LangCodeRecord> = records.filter(el => commonLangCodes.includes(el.lang));
 
         return languages;
     }
