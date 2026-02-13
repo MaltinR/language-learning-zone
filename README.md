@@ -3,16 +3,33 @@
 ## Roadmap
 - [x] Standardize basic lang code
 - [x] Web frontend
-- [ ] Docker support
+- [x] Docker support
 
-To install dependencies:
+## To run it locally
+
+### Requirement
+- bun (Tested on v1.3.9)
 
 ```bash
+
+# install frontend dependencies
+cd ./frontend
 bun install
+
+# install server dependencies
+cd .. 
+bun install
+
+# run
+bun run ./src/server.ts
+
 ```
 
-To run server:
-
+## Docker
 ```bash
-bun run ./src/server.ts
+
+# path ./language-learning-zone
+docker build -t language-learning-zone .
+docker run -p "1668:1668" language-learning-zone
+
 ```
