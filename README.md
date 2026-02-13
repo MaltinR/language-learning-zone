@@ -12,6 +12,10 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] Web frontend
 - [x] Docker support
 
+## Before you run
+Clone from .env.example and rename it to .env
+Fill in data in .env file, e.g. api key
+
 ## To run it locally
 
 ### Requirement
