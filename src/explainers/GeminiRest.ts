@@ -89,11 +89,12 @@ export default class GeminiRest implements Explainer {
     text: string,
     history: Array<Message> | null | undefined,
   ): Object {
+    // history will ignore text
     const contents =
       history != null
         ? history.map((el) => toGeminiMessage(el.role, el.text))
-        : [];
-    contents.push(toGeminiMessage("user", text));
+        : [toGeminiMessage("user", text)];
+    // contents.push(toGeminiMessage("user", text));
 
     const body = {
       system_instruction: {

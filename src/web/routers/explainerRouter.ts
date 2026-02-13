@@ -32,7 +32,6 @@ export default function explainerRouter() {
     res.json(response);
   });
 
-  // TODO: Stream
   router.post("/:id/explain", async (req: Request, res: Response) => {
     try {
       const id: string = req.params.id as string;
