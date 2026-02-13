@@ -1,5 +1,8 @@
 # Language Learning Zone
 
+## To-do
+- [ ] Fix streaming laggy problem
+
 ## Roadmap
 - [x] Standardize basic lang code
 - [x] Web frontend
