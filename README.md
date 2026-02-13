@@ -7,6 +7,7 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 ## To-do
 - [x] Fix streaming laggy problem
 - [x] DeepL supports english
+- [ ] Google translate as translator
 - [ ] Handling change provider
 
 ## Roadmap
