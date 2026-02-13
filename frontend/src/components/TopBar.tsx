@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Dropdown from "./Dropdown";
 import type Lang from "../interfaces/Lang";
 import type IdText from "../interfaces/IdText";
@@ -16,10 +16,14 @@ function TopBar({
   selectedText,
   fromLangs,
   toLangs,
+  onFromLangSelect,
+  onToLangSelect,
 }: {
   selectedText: string | null;
   fromLangs: Array<Lang>;
   toLangs: Array<Lang>;
+  onFromLangSelect: (id: string) => void;
+  onToLangSelect: (id: string) => void;
 }) {
   const [fromLang, setFromLang] = useState<Lang | null>(fromLangs[0]);
   const [toLang, setToLang] = useState<Lang | null>(toLangs[0]);
@@ -32,13 +36,13 @@ function TopBar({
     return toLangs.map((lang) => ({ id: lang.lang, text: lang.name }));
   }, [toLangs]);
 
-  const onFromLangSelect = useCallback(
+  const onFromLangSelectInternal = useCallback(
     (id: string) => {
       setFromLang(fromLangs.find((lang) => lang.lang === id)!);
     },
     [setFromLang, fromLangs],
   );
-  const onToLangSelect = useCallback(
+  const onToLangSelectInternal = useCallback(
     (id: string) => {
       setToLang(toLangs.find((lang) => lang.lang === id)!);
     },
@@ -48,6 +52,14 @@ function TopBar({
     setFromLang(toLang);
     setToLang(fromLang);
   }, [setFromLang, setToLang, fromLang, toLang]);
+
+  useEffect(() => {
+    onFromLangSelect(fromLang!.lang)
+  }, [onFromLangSelect, fromLang]);
+
+  useEffect(() => {
+    onToLangSelect(toLang!.lang)
+  }, [onToLangSelect, toLang]);
 
   return (
     <div className="bg-stone-800 w-full flex justify-center items-center py-1.5 h-10">
@@ -59,7 +71,7 @@ function TopBar({
       <div className="flex-1 flex justify-center items-center">
         <Dropdown
           className="bg-stone-900 rounded text-white p-1 w-25 focus:outline-none mx-2"
-          onSelect={onFromLangSelect}
+          onSelect={onFromLangSelectInternal}
           options={fromLangOptions}
           value={fromLang?.lang ?? "-"}
         />
@@ -71,7 +83,7 @@ function TopBar({
         </button>
         <Dropdown
           className="bg-stone-900 rounded text-white p-1 w-25 focus:outline-none mx-2"
-          onSelect={onToLangSelect}
+          onSelect={onToLangSelectInternal}
           options={toLangOptions}
           value={toLang?.lang ?? "-"}
         />

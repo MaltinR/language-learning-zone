@@ -46,7 +46,13 @@ interface NextResponse {
   result: string;
 }
 
-function Source({ onTextUpdated }: { onTextUpdated: (text: string) => void }) {
+function Source({
+  onTextUpdated,
+  updatedLang,
+}: {
+  onTextUpdated: (text: string) => void;
+  updatedLang: string | null;
+}) {
   const [sourceProviders, setSourceProviders] = useState<Array<SourceProvider>>(
     [],
   );
@@ -123,7 +129,14 @@ function Source({ onTextUpdated }: { onTextUpdated: (text: string) => void }) {
 
   useEffect(() => {
     onTextUpdated(generatedText);
-  }, [generatedText]);
+  }, [onTextUpdated, generatedText]);
+
+  useEffect(() => {
+    if (updatedLang == null) return;
+    const lang = langs.find(el => el.lang === updatedLang);
+    if (lang == null) return;
+    setCurrentLang(lang);
+  }, [setCurrentLang, updatedLang, langs]);
 
   return (
     <div className="flex-1 h-full flex flex-col">

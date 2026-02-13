@@ -88,10 +88,13 @@ function Explainer({
   text,
   fromLangs,
   toLangs,
+  updatedFromLang,
+  updatedToLang,
 }: {
   text: string;
   fromLangs: Array<Lang>;
   toLangs: Array<Lang>;
+  updatedFromLang: string | null; updatedToLang: string | null
 }) {
   const [isInited, setIsInited] = useState<boolean>(false);
   const [explainers, setExplainers] = useState<Array<Explainer>>([]);
@@ -259,6 +262,20 @@ function Explainer({
       setCurrentExplainer,
     );
   }, []);
+
+  useEffect(() => {
+    if (updatedFromLang == null) return;
+    const fromLang = fromLangs.find(lang => lang.lang === updatedFromLang);
+    if (fromLang == null) return;
+    setFromLang(fromLang);
+  }, [setFromLang, updatedFromLang, fromLangs]);
+
+  useEffect(() => {
+    if (updatedToLang == null) return;
+    const toLang = toLangs.find(lang => lang.lang === updatedToLang);
+    if (toLang == null) return;
+    setToLang(toLang);
+  }, [setToLang, updatedToLang, toLangs]);
 
   return (
     <div className="flex-1 h-full flex flex-col">

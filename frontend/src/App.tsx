@@ -9,10 +9,12 @@ import TopBar from "./components/TopBar";
 function App() {
   const [text, setText] = useState<string>("");
   const [selectedText, setSelectedText] = useState<string | null>(null);
+  const [fromLang, setFromLang] = useState<string | null>(null);
+  const [toLang, setToLang] = useState<string | null>(null);
 
   const currentText = useMemo(() => {
     return selectedText != null && selectedText != "" ? selectedText : text;
-  }, [text, selectedText])
+  }, [text, selectedText]);
 
   const onTextUpdated = useCallback(
     (text: string) => {
@@ -28,24 +30,48 @@ function App() {
     } else {
       setSelectedText(null);
     }
-}, [setSelectedText]);
+  }, [setSelectedText]);
+
+  const onFromLangSelect = useCallback(
+    (id: string) => {
+      setFromLang(id);
+    },
+    [setFromLang],
+  );
+
+  const onToLangSelect = useCallback(
+    (id: string) => {
+      setToLang(id);
+    },
+    [setToLang],
+  );
 
   return (
     <div onMouseUp={onMouseUp} className="flex bg-stone-900 w-screen h-screen">
       <div className="flex-1 flex flex-col min-h-0">
-        <TopBar selectedText={selectedText} fromLangs={commonLangs} toLangs={commonLangs} />
+        <TopBar
+          selectedText={selectedText}
+          fromLangs={commonLangs}
+          toLangs={commonLangs}
+          onFromLangSelect={onFromLangSelect}
+          onToLangSelect={onToLangSelect}
+        />
         <div className="flex-1 flex min-h-0">
           {/* <div className="flex-1 flex items-center justify-center flex-col min-h-0"> */}
           <div className="flex-1 flex flex-col min-h-0">
             <div className="min-h-2/5 w-full">
               <Area>
-                <Source onTextUpdated={onTextUpdated} />
+                <Source onTextUpdated={onTextUpdated} updatedLang={fromLang} />
               </Area>
             </div>
             {/* <div className="flex w-full"> */}
             <div className="flex-1 flex flex-col min-h-0">
               <Area>
-                <Translator text={currentText} />
+                <Translator
+                  text={currentText}
+                  updatedFromLang={fromLang}
+                  updatedToLang={toLang}
+                />
               </Area>
             </div>
           </div>
@@ -55,6 +81,8 @@ function App() {
                 text={currentText}
                 fromLangs={commonLangs}
                 toLangs={commonLangs}
+                updatedFromLang={fromLang}
+                updatedToLang={toLang}
               />
             </Area>
           </div>

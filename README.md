@@ -1,10 +1,9 @@
 # Language Learning Zone
 
 ## Roadmap
-- [x] Standardize lang code
-- [ ] Web frontend
+- [x] Standardize basic lang code
+- [x] Web frontend
 - [ ] Docker support
-
 
 To install dependencies:
 
