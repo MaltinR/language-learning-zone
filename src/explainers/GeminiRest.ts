@@ -1,9 +1,9 @@
 import axios from "axios";
 import type Explainer from "./Explainer";
 import * as utils from "./utils";
+import type Message from "./Message";
 
 export default class GeminiRest implements Explainer {
-
   id: string;
   name: string;
   useStream: boolean;
@@ -21,18 +21,23 @@ export default class GeminiRest implements Explainer {
     textLang: string,
     explainLang: string,
     promptTemplate: string,
+    history?: Array<Message> | null,
     onTextUpdate?: ((deltaText: string) => void) | null,
   ): Promise<string> {
     const prompt = utils.fromTemplate(promptTemplate, textLang, explainLang);
 
-    const endPoint = this.origin + (this.useStream
-      ? "/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse"
-      : "/v1beta/models/gemini-2.5-flash:generateContent");
+    const endPoint =
+      this.origin +
+      (this.useStream
+        ? "/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse"
+        : "/v1beta/models/gemini-2.5-flash:generateContent");
 
     const apiKey = process.env.GEMINI_KEY;
     console.assert(apiKey != null);
 
-    const body = this.getBody(prompt, text);
+    const body = this.getBody(prompt, text, history);
+
+    console.log(JSON.stringify(body));
 
     if (this.useStream) {
       const res = await axios.post(endPoint, body, {
@@ -79,7 +84,17 @@ export default class GeminiRest implements Explainer {
     }
   }
 
-  getBody(systemPrompt: string, text: string): Object {
+  getBody(
+    systemPrompt: string,
+    text: string,
+    history: Array<Message> | null | undefined,
+  ): Object {
+    const contents =
+      history != null
+        ? history.map((el) => toGeminiMessage(el.role, el.text))
+        : [];
+    contents.push(toGeminiMessage("user", text));
+
     const body = {
       system_instruction: {
         parts: [
@@ -88,19 +103,21 @@ export default class GeminiRest implements Explainer {
           },
         ],
       },
-      contents: [
-        {
-          parts: [
-            {
-              text,
-            },
-          ],
-          role: "user",
-        },
-      ],
+      contents,
     };
     return body;
   }
+}
+
+function toGeminiMessage(role: string, text: string) {
+  return {
+    parts: [
+      {
+        text,
+      },
+    ],
+    role: role === "assistant" ? "model" : role,
+  };
 }
 
 interface GenerateContentResponse {

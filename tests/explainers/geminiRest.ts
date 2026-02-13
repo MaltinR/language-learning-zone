@@ -15,7 +15,7 @@ async function test() {
     console.assert(promptTemplate != null);
     console.log(`PromptTemplate: '${promptTemplate}'`);
 
-    const explanation = await explainer.explain(testText, testTextLang, testExplainLang, promptTemplate, onTextUpdate);
+    const explanation = await explainer.explain(testText, testTextLang, testExplainLang, promptTemplate, [], onTextUpdate);
     console.assert(explanation != null);
     console.log(`Explanation: '${explanation}'`);
 }
