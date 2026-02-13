@@ -79,7 +79,7 @@ function TopBar({
           onClick={onSwitchButtonClick}
           className="p-1 rounded-md cursor-pointer hover:bg-stone-400"
         >
-          <img className="text-white w-4 h-4" src={switchIcon} />
+          <img className="w-4 h-4" src={switchIcon} />
         </button>
         <Dropdown
           className="bg-stone-900 rounded text-white p-1 w-25 focus:outline-none mx-2"

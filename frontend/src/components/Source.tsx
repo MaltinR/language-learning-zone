@@ -4,6 +4,8 @@ import Button from "./Button";
 import Dropdown from "./Dropdown";
 import type IdText from "../interfaces/IdText";
 import type Lang from "../interfaces/Lang";
+import eyeIcon from "../assets/eye.svg";
+import penIcon from "../assets/pen.svg";
 
 async function initFetch(
   setSourceProviders: React.Dispatch<React.SetStateAction<SourceProvider[]>>,
@@ -62,6 +64,7 @@ function Source({
   const [currentSourceProvider, setCurrentSourceProvider] =
     useState<SourceProvider | null>(null);
   const [currentLang, setCurrentLang] = useState<Lang | null>(null);
+  const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 
   const sourceProviderOptions: Array<IdText> = useMemo(() => {
     return sourceProviders.map((sourceProvider) => ({
@@ -100,6 +103,10 @@ function Source({
     currentSourceProvider,
   ]);
 
+  const onViewButtonClick = useCallback(() => {
+    setIsReadOnly((isReadOnly) => !isReadOnly);
+  }, []);
+
   const onSourceProviderSelect = useCallback(
     (id: string) => {
       return setCurrentSourceProvider(
@@ -133,7 +140,7 @@ function Source({
 
   useEffect(() => {
     if (updatedLang == null) return;
-    const lang = langs.find(el => el.lang === updatedLang);
+    const lang = langs.find((el) => el.lang === updatedLang);
     if (lang == null) return;
     setCurrentLang(lang);
   }, [setCurrentLang, updatedLang, langs]);
@@ -162,15 +169,21 @@ function Source({
           <div
             className={`bg-stone-800 flex flex-1 mt-2 mb-4 rounded-md border-2 ${isFetching ? "text-emerald-600" : "text-stone-800"}`}
           >
-            <textarea
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                onTextChange(e.target.value)
-              }
-              draggable={false}
-              placeholder="Click 'Next' to generate text"
-              className="py-2 px-4 text-white flex-1 resize-none focus:outline-none"
-              value={generatedText}
-            />
+            {isReadOnly ? (
+              <div className={`py-2 px-4 flex-1 resize-none ${generatedText != "" ? "text-white" : "text-[#FFFFFF80]"} focus:outline-none`}>
+                {generatedText != "" ? generatedText : "Click 'Next' to generate text"}
+              </div>
+            ) : (
+              <textarea
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  onTextChange(e.target.value)
+                }
+                draggable={false}
+                placeholder="Click 'Next' to generate text"
+                className="py-2 px-4 text-white flex-1 resize-none focus:outline-none"
+                value={generatedText}
+              />
+            )}
           </div>
         </div>
         <div className="flex justify-center mb-1">
@@ -178,7 +191,14 @@ function Source({
           <Button className="flex-1" onClick={onClick}>
             Next
           </Button>
-          <div className="flex-1" />
+          <div className="flex-1 flex justify-end items-center">
+            <button
+              onClick={onViewButtonClick}
+              className="p-1 rounded-md cursor-pointer hover:bg-stone-400"
+            >
+              <img className="w-6 h-6" src={isReadOnly ? penIcon : eyeIcon} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

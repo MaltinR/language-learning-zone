@@ -34,6 +34,8 @@ export const commonLangs: Array<LangCodeRecord> = [
   {lang: "uk", name: "Ukrainian"},
   {lang: "vi", name: "Vietnamese"},
   {lang: "zh", name: "Chinese"},
+  {lang: "zh-hans", name: "Chinese (Simplified)"},
+  {lang: "zh-hant", name: "Chinese (Traditional)"},
   {lang: "yue", name: "Cantonese"},
   {lang: "ms", name: "Malay"},
 ];
