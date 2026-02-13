@@ -91,7 +91,7 @@ export default class GeminiRest implements Explainer {
   ): Object {
     // history will ignore text
     const contents =
-      history != null
+      history != null && history.length > 0
         ? history.map((el) => toGeminiMessage(el.role, el.text))
         : [toGeminiMessage("user", text)];
     // contents.push(toGeminiMessage("user", text));

@@ -118,7 +118,7 @@ function Translator({ text }: { text: string }) {
     } finally {
       setIsFetching(false);
     }
-  }, [setIsFetching, setTranslations, isFetching, translations, text]);
+  }, [setIsFetching, setTranslations, isFetching, translations, currentTranslator, fromLang, text]);
 
   const onTranslatorSelect = useCallback(
     (id: string) => {

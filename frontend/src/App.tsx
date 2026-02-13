@@ -3,6 +3,7 @@ import Area from "./components/Area";
 import Explainer from "./components/Explainer";
 import Source from "./components/Source";
 import Translator from "./components/Translator";
+import { commonLangs } from "./langCodes/commonLangs";
 
 function App() {
   const [text, setText] = useState("");
@@ -27,7 +28,7 @@ function App() {
       </div>
       <div className="flex-1 flex items-center justify-center">
         <Area>
-          <Explainer />
+          <Explainer text={text} fromLangs={commonLangs} toLangs={commonLangs} />
         </Area>
       </div>
     </div>
