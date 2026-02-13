@@ -265,9 +265,9 @@ function Explainer({
       {/* Header */}
       <div className="border-b-2 flex flex-row justify-between items-center">
         <div className="text-white px-6 py-3 font-bold text-xl">Explainer</div>
-        <div className="pr-4 flex items-center">
+        <div className="pr-4 flex flex-wrap items-center">
           <Dropdown
-            className="bg-stone-800 rounded text-white p-1 w-37.5 focus:outline-none mx-2"
+            className="bg-stone-800 rounded text-white p-1 w-25 focus:outline-none mx-2"
             onSelect={onExplainerSelect}
             options={explainerOptions}
             value={currentExplainer?.id ?? "-"}

@@ -129,15 +129,15 @@ function Source({ onTextUpdated }: { onTextUpdated: (text: string) => void }) {
     <div className="flex-1 h-full flex flex-col">
       <div className="border-b-2 flex flex-row justify-between items-center">
         <div className="text-white px-6 py-3 font-bold text-xl">Source</div>
-        <div className="pr-4">
+        <div className="pr-4 flex flex-wrap items-center">
           <Dropdown
-            className="bg-stone-800 rounded text-white p-1 w-37.5 focus:outline-none mx-2"
+            className="bg-stone-800 rounded text-white p-1 w-25 focus:outline-none mx-2"
             onSelect={onSourceProviderSelect}
             options={sourceProviderOptions}
             value={currentSourceProvider?.id ?? ""}
           />
           <Dropdown
-            className="bg-stone-800 rounded text-white p-1 w-37.5 focus:outline-none"
+            className="bg-stone-800 rounded text-white p-1 w-25 focus:outline-none"
             onSelect={onLangSelect}
             options={langOptions}
             value={currentLang?.lang ?? ""}

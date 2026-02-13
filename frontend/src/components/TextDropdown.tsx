@@ -18,7 +18,7 @@ function TextDropdown({
     <>
       <div className="text-white ml-4 mr-1">{name}</div>
       <Dropdown
-        className={`bg-stone-800 rounded text-white p-1 w-37.5 focus:outline-none ${className ?? ""}`}
+        className={`bg-stone-800 rounded text-white p-1 w-25 focus:outline-none ${className ?? ""}`}
         onSelect={onSelect}
         options={options}
         value={value}

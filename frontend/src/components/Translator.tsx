@@ -164,13 +164,13 @@ function Translator({ text }: { text: string }) {
   }, []);
 
   return (
-    <div className="flex-1 h-full flex flex-col">
+    <div className="flex-1 h-full flex flex-col min-h-0">
       {/* Header */}
-      <div className="border-b-2 flex flex-row justify-between items-center">
+      <div className="border-b-2 flex flex-row justify-between items-center shrink-0">
         <div className="text-white px-6 py-3 font-bold text-xl">Translator</div>
-        <div className="pr-4 flex items-center">
+        <div className="pr-4 flex flex-wrap items-center">
           <Dropdown
-            className="bg-stone-800 rounded text-white p-1 w-37.5 focus:outline-none mx-2"
+            className="bg-stone-800 rounded text-white p-1 w-w-25 focus:outline-none mx-2"
             onSelect={onTranslatorSelect}
             options={translatorOptions}
             value={currentTranslator?.id ?? "-"}
@@ -185,9 +185,8 @@ function Translator({ text }: { text: string }) {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 flex flex-col overflow-y-auto ">
+      <div className="flex-1 flex flex-col overflow-y-auto">
         <div className={`text-white flex-1 flex flex-col border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}>
-          <div className="flex">
             <div className="flex flex-col flex-1 items-center mx-2 mt-2">
               {translations.map((_, index) => (
                 <TranslationRow
@@ -210,14 +209,13 @@ function Translator({ text }: { text: string }) {
 
               {translations.length < toLangs.length && (
                 <button
-                  className="bg-stone-700 w-full text-3xl rounded-md text-center cursor-pointer hover:bg-stone-800"
+                  className="bg-stone-700 w-full text-3xl rounded-md text-center cursor-pointer focus:outline-none hover:bg-stone-800"
                   onClick={onButtonClick}
                 >
                   +
                 </button>
               )}
             </div>
-          </div>
         </div>
       </div>
 
