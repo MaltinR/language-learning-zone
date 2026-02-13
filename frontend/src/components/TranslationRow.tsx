@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import TextDropdown from "./TextDropdown";
 import type IdText from "../interfaces/IdText";
 import removeIcon from "../assets/cross.svg";

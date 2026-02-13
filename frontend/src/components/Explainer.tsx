@@ -26,25 +26,6 @@ interface ExplainRequest {
   history: Array<MessageData>;
 }
 
-const testMessages: Array<MessageData> = [
-  {
-    role: "user",
-    text: "Hello world 1",
-  },
-  {
-    role: "assistant",
-    text: "Hello world 2",
-  },
-  {
-    role: "user",
-    text: "Hello world 3",
-  },
-  {
-    role: "assistant",
-    text: '好的，這句話的翻譯和逐字解釋如下：\n\n---\n\n**Original Japanese:** それがほしいんでしょう、そうじゃありませんか。\n\n**Traditional Chinese Translation:** 你想要那個的吧？不是嗎？\n\n---\n\n**Word-by-word grammatical explanation:**\n\n1.  **それ (sore)**\n    *   **Meaning:** That; it.\n    *   **Traditional Chinese:** **那個 (nà ge)**\n        *   **Literal Meaning:** That one / That thing.\n        *   **Grammatical Role:** Demonstrative pronoun, acting as the object of desire.\n\n2.  **が (ga)**\n    *   **Meaning:** Subject particle. In the phrase "それがほしい," "それ" is technically the subject of the adjective "ほしい."\n    *   **Traditional Chinese:** (Implied / not directly translated)\n        *   **Explanation:** In Chinese, the subject particle is often omitted when the subject is clear, especially when referring to an object of desire. The structure "你想要那個" already clearly indicates "你 (you)" as the subject of the action "想要 (want)" and "那個 (that)" as the object.\n\n3.  **ほしい (hoshii)**\n    *   **Meaning:** To want; to desire (an object). (It\'s an い-adjective in Japanese).\n    *   **Traditional Chinese:** **想要 (xiǎng yào)**\n        *   **Literal Meaning:** Think-want / Desire.\n        *   **Grammatical Role:** Verb phrase expressing desire. "要 (yào)" alone means "want" or "need," but "想要 (xiǎng yào)" emphasizes the *desire* aspect more, which matches the nuance of "ほしい."\n\n4.  **んでしょう (ndeshō)**\n    *   **Meaning:** This is a contraction of "のです" (no desu - indicating explanation or emphasis) + "でしょう" (deshō - indicating conjecture, likelihood, or seeking confirmation, often politely). Together, it means "It is that you want it, right?" or "You probably want it, don\'t you?" It implies the speaker is making an assumption and seeking confirmation.\n    *   **Traditional Chinese:** **的吧 (de ba)**\n        *   **Literal Meaning:** [Emphatic/explanatory particle] + [Question/conjecture particle].\n        *   **Grammatical Role:** Modal particle phrase indicating a guess, assumption, or seeking agreement.\n            *   **的 (de):** Similar to Japanese "の (no)" in "のです," it adds emphasis or explanatory nuance to the preceding statement, suggesting "it\'s the case that..."\n            *   **吧 (ba):** Similar to Japanese "でしょう," it turns the statement into a question seeking confirmation or expressing conjecture, meaning "right?" "I suppose," "isn\'t it?"\n\n5.  **そう (sō)**\n    *   **Meaning:** That way; like that; so.\n    *   **Traditional Chinese:** (Implied / incorporated into the following phrase)\n        *   **Explanation:** The "so" or "that way" is naturally included in the broader question of confirmation.\n\n6.  **じゃありませんか (ja arimasen ka)**\n    *   **Meaning:** Is it not so? / Isn\'t that right? (Polite negative question form of "です"). It\'s a direct way to seek strong confirmation, often with a rhetorical or challenging tone.\n    *   **Traditional Chinese:** **不是嗎 (bú shì ma)**\n        *   **Literal Meaning:** Not be particle.\n        *   **Grammatical Role:** Rhetorical question tag.\n            *   **不 (bù):** Negation particle, "not."\n            *   **是 (shì):** Verb "to be," "is."\n            *   **嗎 (ma):** Question particle.\n        *   **Explanation:** Together, "不是嗎" directly translates to "isn\'t it?" or "am I wrong?", perfectly matching the function of "じゃありませんか." It reinforces the previous assumption with a direct challenge for denial.\n\n---\n😊',
-  },
-];
-
 async function initFetch(
   setIsInited: React.Dispatch<React.SetStateAction<boolean>>,
   setExplainers: React.Dispatch<React.SetStateAction<Explainer[]>>,
