@@ -9,8 +9,8 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] DeepL supports english
 - [x] Google translate as translator
 - [x] Handling change provider
+- [x] Github models as explainer
 - [ ] Wikipedia random as source
-- [ ] Github models as explainer
 
 ## Roadmap
 - [x] Standardize basic lang code

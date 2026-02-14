@@ -5,8 +5,9 @@ import type Explainer from "../../explainers/Explainer";
 import type ExplainRequest from "../interfaces/ExplainRequest";
 import type ExplainResponse from "../interfaces/ExplainResponse";
 import type PromptTemplateResponse from "../interfaces/PromptTemplateResponse";
+import GithubModels from "../../explainers/GithubModels";
 
-const explainers: Array<Explainer> = [new GeminiRest(true)];
+const explainers: Array<Explainer> = [new GeminiRest(true), new GithubModels(true)];
 const explainerMap = explainers.reduce<Record<string, Explainer>>(
   (acc, item) => {
     acc[item.id] = item;
