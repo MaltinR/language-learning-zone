@@ -10,8 +10,8 @@ import TextDropdown from "./TextDropdown";
 async function initFetch(
   setTranslators: React.Dispatch<React.SetStateAction<Translator[]>>,
   setCurrentTranslator: React.Dispatch<React.SetStateAction<Translator | null>>,
-  setFromLangs: React.Dispatch<React.SetStateAction<Array<Lang>>>,
-  setToLangs: React.Dispatch<React.SetStateAction<Array<Lang>>>,
+  // setFromLangs: React.Dispatch<React.SetStateAction<Array<Lang>>>,
+  // setToLangs: React.Dispatch<React.SetStateAction<Array<Lang>>>,
 ) {
   try {
     const res = await axios.get("/api/translators");
@@ -20,8 +20,8 @@ async function initFetch(
     const translator = translators[0];
     setTranslators(translators);
     setCurrentTranslator(translator);
-    setFromLangs(translator.fromLangs);
-    setToLangs(translator.toLangs);
+    // setFromLangs(translator.fromLangs);
+    // setToLangs(translator.toLangs);
   } catch (err: any) {
     console.error(err);
   }
@@ -206,7 +206,7 @@ function Translator({
   );
 
   useEffect(() => {
-    initFetch(setTranslators, setCurrentTranslator, setFromLangs, setToLangs);
+    initFetch(setTranslators, setCurrentTranslator);
   }, []);
 
   useEffect(() => {
@@ -219,6 +219,12 @@ function Translator({
   useEffect(() => {
     onUpdatedToLangUpdated(updatedToLang);
   }, [onUpdatedToLangUpdated, updatedToLang]);
+
+  useEffect(() => {
+    if (currentTranslator == null) return;
+    setFromLangs(currentTranslator.fromLangs);
+    setToLangs(currentTranslator.toLangs);
+  }, [currentTranslator]);
 
   return (
     <div className="flex-1 h-full flex flex-col min-h-0">

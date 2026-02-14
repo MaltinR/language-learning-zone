@@ -7,8 +7,8 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 ## To-do
 - [x] Fix streaming laggy problem
 - [x] DeepL supports english
-- [ ] Google translate as translator
-- [ ] Handling change provider
+- [x] Google translate as translator
+- [x] Handling change provider
 - [ ] Wikipedia random as source
 - [ ] Github models as explainer
 
@@ -16,6 +16,7 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] Standardize basic lang code
 - [x] Web frontend
 - [x] Docker support
+- [ ] Mobile web UI
 
 ## Before you run
 Clone from .env.example and rename it to .env

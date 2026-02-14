@@ -5,8 +5,10 @@ import type TranslateRequest from "../interfaces/TranslateRequest";
 import type TranslateResponse from "../interfaces/TranslateResponse";
 import type Translator from "../../translators/Translator";
 import type TranslatorInfo from "../interfaces/TranslatorInfo";
+import GoogleTranslate from "../../translators/GoogleTranslate";
 
 const translators : Array<Translator> = [
+    new GoogleTranslate(),
     new DeepL(),
 ];
 const translatorMap = translators.reduce<Record<string, Translator>>((acc, item) => {

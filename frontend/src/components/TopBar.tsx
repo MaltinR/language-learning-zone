@@ -12,6 +12,10 @@ function clipText(text: string) {
     return text;
 }
 
+function getDefaultLang(langs: Array<Lang>): Lang {
+  return langs.find(lang => lang.lang == "en") ?? langs.find(lang => lang.lang.startsWith("en")) ?? langs[0];
+}
+
 function TopBar({
   selectedText,
   fromLangs,
@@ -25,8 +29,8 @@ function TopBar({
   onFromLangSelect: (id: string) => void;
   onToLangSelect: (id: string) => void;
 }) {
-  const [fromLang, setFromLang] = useState<Lang | null>(fromLangs[0]);
-  const [toLang, setToLang] = useState<Lang | null>(toLangs[0]);
+  const [fromLang, setFromLang] = useState<Lang | null>(getDefaultLang(fromLangs));
+  const [toLang, setToLang] = useState<Lang | null>(getDefaultLang(toLangs));
 
   const fromLangOptions: Array<IdText> = useMemo(() => {
     return fromLangs.map((lang) => ({ id: lang.lang, text: lang.name }));

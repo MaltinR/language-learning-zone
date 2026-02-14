@@ -1,16 +1,34 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Area from "./components/Area";
 import Explainer from "./components/Explainer";
 import Source from "./components/Source";
 import Translator from "./components/Translator";
-import { commonLangs } from "./langCodes/commonLangs";
+// import { commonLangs } from "./langCodes/commonLangs";
 import TopBar from "./components/TopBar";
+import type Lang from "./interfaces/Lang";
+import axios from "axios";
+
+async function initFetch(
+  setCommonLangs: React.Dispatch<React.SetStateAction<Lang[]>>,
+  setIsInited: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+  try {
+    const res = await axios.get("/api/langs");
+    const data: Array<Lang> = res.data;
+    setCommonLangs(data);
+    setIsInited(true);
+  } catch (err: any) {
+    console.error(err);
+  }
+}
 
 function App() {
   const [text, setText] = useState<string>("");
   const [selectedText, setSelectedText] = useState<string | null>(null);
   const [fromLang, setFromLang] = useState<string | null>(null);
   const [toLang, setToLang] = useState<string | null>(null);
+  const [commonLangs, setCommonLangs] = useState<Array<Lang>>([]);
+  const [isInited, setIsInited] = useState<boolean>(false);
 
   const currentText = useMemo(() => {
     return selectedText != null && selectedText != "" ? selectedText : text;
@@ -46,48 +64,61 @@ function App() {
     [setToLang],
   );
 
+  useEffect(() => {
+    initFetch(setCommonLangs, setIsInited);
+  }, []);
+
   return (
     <div onMouseUp={onMouseUp} className="flex bg-stone-900 w-screen h-screen">
-      <div className="flex-1 flex flex-col min-h-0">
-        <TopBar
-          selectedText={selectedText}
-          fromLangs={commonLangs}
-          toLangs={commonLangs}
-          onFromLangSelect={onFromLangSelect}
-          onToLangSelect={onToLangSelect}
-        />
-        <div className="flex-1 flex min-h-0">
-          {/* <div className="flex-1 flex items-center justify-center flex-col min-h-0"> */}
-          <div className="flex-1 flex flex-col min-h-0">
-            <div className="min-h-2/5 w-full">
-              <Area>
-                <Source onTextUpdated={onTextUpdated} updatedLang={fromLang} />
-              </Area>
-            </div>
-            {/* <div className="flex w-full"> */}
+      {!isInited ? (
+        <div className="flex text-white font-bold text-2xl flex-1 justify-center items-center">
+          <div className="flex-1 text-center">Loading into App</div>
+        </div>
+      ) : (
+        <div className="flex-1 flex flex-col min-h-0">
+          <TopBar
+            selectedText={selectedText}
+            fromLangs={commonLangs}
+            toLangs={commonLangs}
+            onFromLangSelect={onFromLangSelect}
+            onToLangSelect={onToLangSelect}
+          />
+          <div className="flex-1 flex min-h-0">
+            {/* <div className="flex-1 flex items-center justify-center flex-col min-h-0"> */}
             <div className="flex-1 flex flex-col min-h-0">
+              <div className="min-h-2/5 w-full">
+                <Area>
+                  <Source
+                    onTextUpdated={onTextUpdated}
+                    updatedLang={fromLang}
+                  />
+                </Area>
+              </div>
+              {/* <div className="flex w-full"> */}
+              <div className="flex-1 flex flex-col min-h-0">
+                <Area>
+                  <Translator
+                    text={currentText}
+                    updatedFromLang={fromLang}
+                    updatedToLang={toLang}
+                  />
+                </Area>
+              </div>
+            </div>
+            <div className="flex-1 flex items-center justify-center">
               <Area>
-                <Translator
+                <Explainer
                   text={currentText}
+                  fromLangs={commonLangs}
+                  toLangs={commonLangs}
                   updatedFromLang={fromLang}
                   updatedToLang={toLang}
                 />
               </Area>
             </div>
           </div>
-          <div className="flex-1 flex items-center justify-center">
-            <Area>
-              <Explainer
-                text={currentText}
-                fromLangs={commonLangs}
-                toLangs={commonLangs}
-                updatedFromLang={fromLang}
-                updatedToLang={toLang}
-              />
-            </Area>
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

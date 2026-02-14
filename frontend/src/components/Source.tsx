@@ -9,7 +9,7 @@ import penIcon from "../assets/pen.svg";
 
 async function initFetch(
   setSourceProviders: React.Dispatch<React.SetStateAction<SourceProvider[]>>,
-  setLangs: React.Dispatch<React.SetStateAction<Lang[]>>,
+  // setLangs: React.Dispatch<React.SetStateAction<Lang[]>>,
   setCurrentSourceProvider: React.Dispatch<
     React.SetStateAction<SourceProvider | null>
   >,
@@ -21,7 +21,7 @@ async function initFetch(
     setSourceProviders(providers);
     const currentProvider = providers[0];
     setCurrentSourceProvider(currentProvider);
-    setLangs(currentProvider.langs);
+    // setLangs(currentProvider.langs);
   } catch (err: any) {
     console.error(err);
   }
@@ -131,7 +131,7 @@ function Source({
   );
 
   useEffect(() => {
-    initFetch(setSourceProviders, setLangs, setCurrentSourceProvider);
+    initFetch(setSourceProviders, setCurrentSourceProvider);
   }, []);
 
   useEffect(() => {
@@ -144,6 +144,11 @@ function Source({
     if (lang == null) return;
     setCurrentLang(lang);
   }, [setCurrentLang, updatedLang, langs]);
+
+  useEffect(() => {
+    if (currentSourceProvider == null) return;
+    setLangs(currentSourceProvider.langs);
+  }, [currentSourceProvider]);
 
   return (
     <div className="flex-1 h-full flex flex-col">
