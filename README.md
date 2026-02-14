@@ -11,12 +11,14 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] Handling change provider
 - [x] Github models as explainer
 - [x] Wikipedia random as source
+- [ ] Languages order by alphabet
 
 ## Roadmap
 - [x] Standardize basic lang code
 - [x] Web frontend
 - [x] Docker support
 - [ ] Mobile web UI
+- [ ] Native TTS support
 
 ## Provider
 ### Source
@@ -59,6 +61,6 @@ bun run ./src/server.ts
 
 # path ./language-learning-zone
 docker build -t language-learning-zone .
-docker run -p "1668:1668" language-learning-zone
+docker run -d -p "1668:1668" language-learning-zone
 
 ```
