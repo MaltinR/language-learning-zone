@@ -18,6 +18,18 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] Docker support
 - [ ] Mobile web UI
 
+## Provider
+### Source
++ Tatoeba
++ Wikipedia
+### Translator
++ Google Translate
++ DeepL
+### Explainer
++ Gemini
++ Github Models
+
+
 ## Before you run
 Clone from .env.example and rename it to .env
 Fill in data in .env file, e.g. api key
