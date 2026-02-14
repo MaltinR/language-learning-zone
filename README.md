@@ -10,7 +10,7 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] Google translate as translator
 - [x] Handling change provider
 - [x] Github models as explainer
-- [ ] Wikipedia random as source
+- [x] Wikipedia random as source
 
 ## Roadmap
 - [x] Standardize basic lang code

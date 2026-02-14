@@ -105,7 +105,7 @@ function Translator({
             fromLang: fromLang!.lang,
             toLang: el.toLang,
           };
-          console.log(body);
+          // console.log(body);
           return axios.post(
             `/api/translators/${currentTranslator!.id}/translate`,
             body,
@@ -114,7 +114,7 @@ function Translator({
       );
       const newTranslations: Array<Translation> = translationResponses.map(
         (res, i) => {
-          console.log(res.data);
+          // console.log(res.data);
           const data: TranslateResponse = res.data;
           return {
             toLang: translations.find((_, index) => index === i)!.toLang,
@@ -165,9 +165,9 @@ function Translator({
 
   const onButtonClick = useCallback(() => {
     setTranslations((translators) => {
-      console.log(
-        `Next: ${toLangs.find((lang) => !inUseToLangs.includes(lang.lang))!.lang}`,
-      );
+      // console.log(
+      //   `Next: ${toLangs.find((lang) => !inUseToLangs.includes(lang.lang))!.lang}`,
+      // );
       return [
         ...translators,
         {

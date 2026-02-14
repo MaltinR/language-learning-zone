@@ -1,7 +1,7 @@
 import axios from "axios";
 import type SourceProvider from "./SourceProvider";
 import * as cheerio from "cheerio";
-import type LangCodeProvider from "../langCodes/LangCodeRecord";
+import type LangCodeRecord from "../langCodes/LangCodeRecord";
 import { commonLangs } from "../langCodes/CommonLangs";
 
 export default class Tatoeba implements SourceProvider {
@@ -22,7 +22,7 @@ export default class Tatoeba implements SourceProvider {
     // console.log(data);
     return data.sentence.text;
   }
-  async getAllLangs(): Promise<Array<LangCodeProvider>> {
+  async getAllLangs(): Promise<Array<LangCodeRecord>> {
     const commonLangCodes = commonLangs.map((el) => el.lang);
     const endPoint = `https://tatoeba.org/en`;
     const res = await axios.get(endPoint);
@@ -33,7 +33,7 @@ export default class Tatoeba implements SourceProvider {
     );
     // {"abq":"Abaza","abk":"Abkhaz","ady":"Adyghe","afh":"Afrihili"}
     // console.log(languages);
-    const languages: Array<LangCodeProvider> = Object.entries(languagesObject)
+    const languages: Array<LangCodeRecord> = Object.entries(languagesObject)
       .map((el) => {
         try {
           return {
@@ -46,7 +46,7 @@ export default class Tatoeba implements SourceProvider {
       })
       .filter(
         (el) => el != null && commonLangCodes.includes(el.lang),
-      ) as Array<LangCodeProvider>;
+      ) as Array<LangCodeRecord>;
     return languages;
   }
 }

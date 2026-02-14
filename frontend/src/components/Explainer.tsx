@@ -111,10 +111,10 @@ function Explainer({
       const freezedMessages : Array<MessageData> = [...messages];
       if (inputText != null && inputText != "") freezedMessages.push({role: "user", text: inputText});
       const payloadMessages : Array<MessageData> = inputText != "" ? [...messages, {role: "user", text }, {role: "user", text: inputText}] : [...messages];
-      console.log(freezedMessages);
+      // console.log(freezedMessages);
 
       // Debug
-      const start = Date.now();
+      // const start = Date.now();
       const updateText = (fullText: string) => {
         setMessages([
           ...freezedMessages,
@@ -134,7 +134,7 @@ function Explainer({
           promptTemplate,
           payloadMessages,
         );
-        console.log(JSON.stringify(body));
+        // console.log(JSON.stringify(body));
 
         const response = (await fetch(
           `/api/explainers/${currentExplainer!.id}/explain`,
@@ -152,7 +152,7 @@ function Explainer({
         let fullText = "";
 
         const handleResponse = (response: ExplainResponse) => {
-          console.log("Received:", (Date.now() - start).toString(), response);
+          // console.log("Received:", (Date.now() - start).toString(), response);
           if (response.type === "deltaText") {
             fullText += response.deltaText;
             updateText(fullText);

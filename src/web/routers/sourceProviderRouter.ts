@@ -5,9 +5,11 @@ import Tatoeba from "../../sourceProviders/Tatoeba";
 import type SourceNextRequest from "../interfaces/SourceNextRequest";
 import type SourceNextResponse from "../interfaces/SourceNextResponse";
 import type SourceProviderInfo from "../interfaces/SourceProviderInfo";
+import Wikipedia from "../../sourceProviders/Wikipedia";
 
 const sourceProviders : Array<SourceProvider> = [
     new Tatoeba(),
+    new Wikipedia(),
 ];
 const sourceProviderMap = sourceProviders.reduce<Record<string, SourceProvider>>((acc, item) => {
     acc[item.id] = item;

@@ -33,15 +33,21 @@ export default class GoogleTranslate implements Translator {
       format: "text",
     };
 
-    const res = await axios.post(endPoint, body, {
-      headers: {
-        "x-goog-api-key": apiKey,
-      },
-    });
+    try {
+      const res = await axios.post(endPoint, body, {
+        headers: {
+          "x-goog-api-key": apiKey,
+        },
+      });
 
-    const data: GoogleTranslateTranslateResponse = res.data;
-    console.log(data);
-    return data.data.translations[0]!.translatedText;
+      const data: GoogleTranslateTranslateResponse = res.data;
+      console.log(data);
+      return data.data.translations[0]!.translatedText;
+    } catch (e: any) {
+    //   console.error(e);
+      console.log(JSON.stringify(body));
+      throw e;
+    }
   }
 
   getAllFromLangs(): Promise<Array<LangCodeRecord>> {

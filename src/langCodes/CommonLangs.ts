@@ -193,7 +193,7 @@ export const commonLangs: Array<LangCodeRecord> = [
   { lang: "yi", name: "Yiddish" },
   { lang: "yo", name: "Yoruba" },
   { lang: "yua", name: "Yucatec Maya" },
-  { lang: "yue", name: "Yue Chinese" },
+  { lang: "yue", name: "Cantonese" },
   { lang: "zh", name: "Chinese" },
   { lang: "zh-Hans", name: "Chinese (Simplified)" },
   { lang: "zh-Hant", name: "Chinese (Traditional)" },
