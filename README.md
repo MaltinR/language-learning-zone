@@ -36,6 +36,8 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 Clone from .env.example and rename it to .env
 Fill in data in .env file, e.g. api key
 
++ Use port 1668
+
 ## To run it locally
 
 ### Requirement
