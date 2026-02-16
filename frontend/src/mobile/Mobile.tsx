@@ -3,7 +3,6 @@ import {
   useEffect,
   useMemo,
   useState,
-  type SetStateAction,
 } from "react";
 import MainContent from "./components/MainContent";
 import TopBar from "./components/TopBar";

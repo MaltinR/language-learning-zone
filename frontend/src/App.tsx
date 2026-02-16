@@ -75,16 +75,18 @@ function App() {
   return (
     <>
       {isMobile ? (
-        <Mobile fromLangs={commonLangs} toLangs={commonLangs} />
+        !isInited ? (
+          <LoadingScreen />
+        ) : (
+          <Mobile fromLangs={commonLangs} toLangs={commonLangs} />
+        )
       ) : (
         <div
           onMouseUp={onMouseUp}
           className="flex bg-stone-900 w-screen h-screen"
         >
           {!isInited ? (
-            <div className="flex text-white font-bold text-2xl flex-1 justify-center items-center">
-              <div className="flex-1 text-center">Loading into App</div>
-            </div>
+            <LoadingScreen />
           ) : (
             <div className="flex-1 flex flex-col min-h-0">
               <TopBar
@@ -133,6 +135,14 @@ function App() {
         </div>
       )}
     </>
+  );
+}
+
+function LoadingScreen() {
+  return (
+    <div className="flex text-white font-bold text-2xl flex-1 justify-center items-center">
+      <div className="flex-1 text-center">Loading into App</div>
+    </div>
   );
 }
 

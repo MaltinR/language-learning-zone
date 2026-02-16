@@ -74,6 +74,9 @@ function TopBar({
         }
     }, [isSetting, pageType, onSettingClick, onMainClick, onExplainClick]);
 
+    console.log(fromLang);
+    console.log(toLang);
+
   return (
     <div className="bg-stone-800 h-12 flex justify-center items-center px-3 py-2">
       {pageType === "explain" ? (

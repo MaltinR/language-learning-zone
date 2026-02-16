@@ -1,8 +1,16 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import TranslationRow from "../../components/TranslationRow";
 import type Lang from "../../interfaces/Lang";
 import type Translation from "../../interfaces/translator/Translation";
 import type { default as TranslatorType } from "../../interfaces/Translator";
+
+
+function newTranslation(lang: string): Translation {
+  return {
+    toLang: lang,
+    translation: "",
+  };
+}
 
 function Translator({
   translator,
@@ -19,6 +27,7 @@ function Translator({
   translations: Array<Translation>;
   setTranslations: React.Dispatch<React.SetStateAction<Translation[]>>;
 }) {
+  const [lastToLang, setLastToLang] = useState<string | null>(null);
   // Warning if not available
 
   const options = useMemo(() => {
@@ -45,6 +54,38 @@ function Translator({
       ];
     });
   }, [setTranslations, translator, inUseToLangs]);
+
+  
+    const onUpdatedToLangUpdated = useCallback(
+      (updatedToLang: string | null) => {
+        if (updatedToLang == null || updatedToLang === lastToLang) return;
+  
+        const toLang = translator?.toLangs.find((lang) => lang.lang === updatedToLang);
+        if (toLang == null) return;
+  
+        // Check if translation has it, if not, add
+        if (!translations.some((el) => el.toLang === updatedToLang)) {
+          // Check if has previous
+          if (translations.some((el) => el.toLang === lastToLang)) {
+            setTranslations((items) =>
+              items.map((el) =>
+                el.toLang === lastToLang ? newTranslation(updatedToLang) : el,
+              ),
+            );
+          } else {
+            setTranslations((items) => [...items, newTranslation(updatedToLang)]);
+          }
+        }
+  
+        setLastToLang(updatedToLang);
+      },
+      [lastToLang, translator, translations, setTranslations],
+    );
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    onUpdatedToLangUpdated(toLang?.lang ?? null);
+  }, [onUpdatedToLangUpdated, toLang?.lang]);
 
   return (
     <div className="flex-1 flex flex-col h-full">
