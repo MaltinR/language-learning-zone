@@ -63,6 +63,6 @@ bun run ./src/server.ts
 
 # path ./language-learning-zone
 docker build -t language-learning-zone .
-docker run -d -p "1668:1668" language-learning-zone
+docker run -d -p "1668:1668" --name "language-learning-zone" language-learning-zone
 
 ```
