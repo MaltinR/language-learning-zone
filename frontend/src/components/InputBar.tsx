@@ -38,7 +38,7 @@ function InputBar({
         onChange={(e: any) => setInputText(e.target.value)}
       />
       <Button
-        disabled={isSendable && (isFetching || !isInited)}
+        disabled={!isSendable || (isFetching || !isInited)}
         className={`ml-2 h-full ${buttonClassName}`}
         onClick={onSendClick}
       >

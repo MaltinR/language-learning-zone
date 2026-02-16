@@ -53,8 +53,8 @@ function MainPage({
   }, [isNextFetching, isSourceProviderSupported]);
 
   const translateClickable = useMemo(() => {
-    return !isTranslateFetching && isTranslatorSupported;
-  }, [isTranslateFetching, isTranslatorSupported]);
+    return !isTranslateFetching && isTranslatorSupported && targetText.length > 0;
+  }, [isTranslateFetching, isTranslatorSupported, targetText]);
 
   const onNextClick = useCallback(async () => {
     if (isNextFetching) return;
@@ -72,6 +72,7 @@ function MainPage({
       setGeneratedText(data.result);
     } catch (err: any) {
       console.error(err);
+      window.alert("Error occurred while fetching next source");
     } finally {
       setIsNextFetching(false);
     }
@@ -122,6 +123,7 @@ function MainPage({
       );
     } catch (err: any) {
       console.error(err);
+      window.alert("Error occurred, make sure original language and target language are different");
     } finally {
       setIsTranslateFetching(false);
     }

@@ -33,6 +33,7 @@ async function initFetch(
     setIsInited(true);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching explainer list and prompt template");
   }
 }
 
@@ -180,6 +181,7 @@ function Explainer({
         }
       } catch (err: any) {
         console.error(err);
+        window.alert("Error occurred while fetching explanation");
       } finally {
         setIsFetching(false);
       }

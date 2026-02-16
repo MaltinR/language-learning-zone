@@ -21,6 +21,7 @@ async function initFetch(
     setIsInited(true);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching prompt template");
   }
 }
 
@@ -149,6 +150,7 @@ function ExplainPage({
         }
       } catch (err: any) {
         console.error(err);
+        window.alert("Error occurred while fetching explanation");
       } finally {
         setIsFetching(false);
       }

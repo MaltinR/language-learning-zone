@@ -21,6 +21,7 @@ async function initFetch(
     setIsInited(true);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching available languages, please reload");
   }
 }
 

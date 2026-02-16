@@ -35,6 +35,7 @@ async function fetchSourceProviders(
     setCurrentSourceProvider(currentProvider);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching source provider list");
   }
 }
 async function fetchTranslators(
@@ -49,6 +50,7 @@ async function fetchTranslators(
     setCurrentTranslator(currentTranslator);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching translator list");
   }
 }
 async function fetchExplainers(
@@ -63,6 +65,7 @@ async function fetchExplainers(
     setCurrentExplainer(currentExplainer);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching explainer list");
   }
 }
 

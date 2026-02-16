@@ -27,6 +27,7 @@ async function initFetch(
     setCurrentTranslator(translator);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching translator list");
   }
 }
 
@@ -60,6 +61,10 @@ function Translator({
   const [translations, setTranslations] = useState<Array<Translation>>([]);
   const [lastToLang, setLastToLang] = useState<string | null>(null);
   // const [lastRemoveLang, setLastRemoveLang] = useState<string | null>(null);
+
+  const isSendable = useMemo(() => {
+    return text.length > 0;
+  }, [text])
 
   const translatorOptions: Array<IdText> = useMemo(() => {
     return translators.map((translator) => ({
@@ -120,6 +125,7 @@ function Translator({
       );
     } catch (err: any) {
       console.error(err);
+      window.alert("Error occurred while fetching translation(s)");
     } finally {
       setIsFetching(false);
     }
@@ -273,7 +279,7 @@ function Translator({
       {/* Footer */}
       <div className="flex px-6 py-3 justify-center mb-1 border-t-2">
         <div className="flex-1" />
-        <Button className="flex-1" onClick={onClick}>
+        <Button disabled={!isSendable} className="flex-1" onClick={onClick}>
           Translate
         </Button>
         <div className="flex-1" />

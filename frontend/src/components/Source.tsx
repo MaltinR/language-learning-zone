@@ -29,6 +29,7 @@ async function initFetch(
     setCurrentSourceProvider(currentProvider);
   } catch (err: any) {
     console.error(err);
+    window.alert("Error occurred while fetching source provider list");
   }
 }
 
@@ -76,6 +77,7 @@ function Source({
       setGeneratedText(data.result);
     } catch (err: any) {
       console.error(err);
+      window.alert("Error occurred while fetching next source");
     } finally {
       setIsFetching(false);
     }
