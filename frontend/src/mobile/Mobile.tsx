@@ -44,7 +44,12 @@ async function fetchTranslators(
 ) {
   try {
     const res = await axios.get("/api/translators");
-    const translators: Array<Translator> = res.data;
+    const rawTranslators: Array<Translator> = res.data;
+    const translators: Array<Translator> = rawTranslators.map(el => ({
+      ...el, 
+      fromLangs: el.fromLangs.sort((a, b) => a.name.localeCompare(b.name)),
+      toLangs: el.toLangs.sort((a, b) => a.name.localeCompare(b.name)),
+    }));
     setTranslators(translators);
     const currentTranslator = translators[0];
     setCurrentTranslator(currentTranslator);

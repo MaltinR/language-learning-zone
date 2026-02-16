@@ -106,7 +106,7 @@ function Translator({
           <div
             className={`text-white flex-1 flex flex-col rounded-md border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}
           >
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col mx-0.5 mb-0.5">
               {translations.map((el, index) => (
                 <TranslationRow
                   key={index}
