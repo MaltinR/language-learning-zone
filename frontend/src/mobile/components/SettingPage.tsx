@@ -65,7 +65,7 @@ function SettingPage({
 
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="flex-1 flex flex-col items-center px-2">
+      <div className="flex-1 flex flex-col items-center px-2 py-1">
         <SettingItem title="Source" items={sourceProviderOptions} current={currentSourceProvider?.id ?? null} setter={setSourceProvider}/>
         <SettingItem title="Translator" items={translatorOptions} current={currentTranslator?.id ?? null} setter={setTranslator}/>
         <SettingItem title="Explainer" items={explainerOptions} current={currentExplainer?.id ?? null} setter={setExplainer}/>

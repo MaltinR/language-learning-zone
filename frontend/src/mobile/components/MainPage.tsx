@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import Button from "../../components/Button";
 import Area from "./Area";
@@ -114,6 +114,11 @@ function MainPage({
     targetText,
     translations,
   ]);
+
+  useEffect(() => {
+    // TODO: If not copied
+    setTargetText(generatedText);
+  }, [setTargetText, generatedText])
 
   return (
     <div className="flex h-full w-full flex-col min-h-0">
