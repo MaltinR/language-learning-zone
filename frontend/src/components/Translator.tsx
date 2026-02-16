@@ -233,7 +233,7 @@ function Translator({
       {/* Scrollable content */}
       <div className="flex-1 flex flex-col overflow-y-auto">
         <div
-          className={`text-white flex-1 flex flex-col border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}
+          className={`text-white flex-1 flex flex-col rounded-md border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}
         >
           <div className="flex flex-col flex-1 items-center mx-2 mt-2">
             {translations.map((el, index) => (

@@ -72,7 +72,7 @@ function MainPage({
       const translationResponses = await Promise.all(
         translations.map((el) => {
           const body = {
-            targetText,
+            text: targetText,
             fromLang: currentFromLang!.lang,
             toLang: el.toLang,
           };

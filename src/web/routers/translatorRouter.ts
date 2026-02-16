@@ -43,8 +43,12 @@ export default function translatorRouter() {
     router.post("/:id/translate", async (req: Request, res: Response) => {
         const id: string = req.params.id as string;
         const body: TranslateRequest = req.body;
+        console.log(body);
         if (body == null) {
             return res.status(400).json({error: "Invalid body"});
+        }
+        if (body.text == null || body.text == undefined) {
+            return res.status(400).json({error: "Invalid body: text is null or undefined"});
         }
 
         const translator = translatorMap[id];

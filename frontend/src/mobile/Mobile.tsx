@@ -1,20 +1,16 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import MainContent from "./components/MainContent";
 import TopBar from "./components/TopBar";
-import type { PageType } from "./types/PageType";
 import MainPage from "./components/MainPage";
 import SettingPage from "./components/SettingPage";
 import ExplainPage from "./components/ExplainPage";
+import type { PageType } from "./types/PageType";
 import type SourceProvider from "../interfaces/SourceProvider";
 import type Translator from "../interfaces/Translator";
 import type Explainer from "../interfaces/Explainer";
-import axios from "axios";
 import type Lang from "../interfaces/Lang";
+import type MessageData from "../interfaces/MessageData";
 
 function getDefaultLang(langs: Array<Lang>): Lang {
   return (
@@ -102,6 +98,7 @@ function Mobile({
   );
   const [generatedText, setGeneratedText] = useState<string>("");
   const [targetText, setTargetText] = useState<string>("");
+  const [messages, setMessages] = useState<Array<MessageData>>([]);
 
   const onMainClick = useCallback(() => {
     setIsSetting(false);
@@ -154,7 +151,16 @@ function Mobile({
           />
         );
       case "explain":
-        return <ExplainPage />;
+        return (
+          <ExplainPage
+            explainer={currentExplainer}
+            text={targetText}
+            fromLang={currentFromLang}
+            toLang={currentToLang}
+            messages={messages}
+            setMessages={setMessages}
+          />
+        );
     }
   }, [
     isSetting,
@@ -170,6 +176,7 @@ function Mobile({
     currentToLang,
     generatedText,
     targetText,
+    messages,
   ]);
 
   useEffect(() => {

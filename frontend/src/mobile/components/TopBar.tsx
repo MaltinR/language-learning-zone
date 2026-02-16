@@ -25,15 +25,14 @@ function TopBar({
   isSetting: boolean;
   fromLangs: Array<Lang>;
   toLangs: Array<Lang>;
-  fromLang: Lang | null,
-  toLang: Lang | null,
-  setFromLang: React.Dispatch<React.SetStateAction<Lang | null>>,
-  setToLang: React.Dispatch<React.SetStateAction<Lang | null>>,
+  fromLang: Lang | null;
+  toLang: Lang | null;
+  setFromLang: React.Dispatch<React.SetStateAction<Lang | null>>;
+  setToLang: React.Dispatch<React.SetStateAction<Lang | null>>;
   onMainClick: () => void;
   onSettingClick: () => void;
   onExplainClick: () => void;
 }) {
-
   const fromLangOptions: Array<IdText> = useMemo(() => {
     return fromLangs.map((lang) => ({ id: lang.lang, text: lang.name }));
   }, [fromLangs]);
@@ -59,23 +58,17 @@ function TopBar({
     setToLang(fromLang);
   }, [setFromLang, setToLang, fromLang, toLang]);
 
-    const onSettingButtonClick = useCallback(() => {
-        if (!isSetting)
-        {
-            onSettingClick();
-            return;
-        }
-        if (pageType === "main")
-        {
-            onMainClick();
-        }
-        else if (pageType === "explain"){
-            onExplainClick();
-        }
-    }, [isSetting, pageType, onSettingClick, onMainClick, onExplainClick]);
-
-    console.log(fromLang);
-    console.log(toLang);
+  const onSettingButtonClick = useCallback(() => {
+    if (!isSetting) {
+      onSettingClick();
+      return;
+    }
+    if (pageType === "main") {
+      onMainClick();
+    } else if (pageType === "explain") {
+      onExplainClick();
+    }
+  }, [isSetting, pageType, onSettingClick, onMainClick, onExplainClick]);
 
   return (
     <div className="bg-stone-800 h-12 flex justify-center items-center px-3 py-2">

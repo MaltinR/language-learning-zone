@@ -4,7 +4,6 @@ import type Lang from "../../interfaces/Lang";
 import type Translation from "../../interfaces/translator/Translation";
 import type { default as TranslatorType } from "../../interfaces/Translator";
 
-
 function newTranslation(lang: string): Translation {
   return {
     toLang: lang,
@@ -55,32 +54,33 @@ function Translator({
     });
   }, [setTranslations, translator, inUseToLangs]);
 
-  
-    const onUpdatedToLangUpdated = useCallback(
-      (updatedToLang: string | null) => {
-        if (updatedToLang == null || updatedToLang === lastToLang) return;
-  
-        const toLang = translator?.toLangs.find((lang) => lang.lang === updatedToLang);
-        if (toLang == null) return;
-  
-        // Check if translation has it, if not, add
-        if (!translations.some((el) => el.toLang === updatedToLang)) {
-          // Check if has previous
-          if (translations.some((el) => el.toLang === lastToLang)) {
-            setTranslations((items) =>
-              items.map((el) =>
-                el.toLang === lastToLang ? newTranslation(updatedToLang) : el,
-              ),
-            );
-          } else {
-            setTranslations((items) => [...items, newTranslation(updatedToLang)]);
-          }
+  const onUpdatedToLangUpdated = useCallback(
+    (updatedToLang: string | null) => {
+      if (updatedToLang == null || updatedToLang === lastToLang) return;
+
+      const toLang = translator?.toLangs.find(
+        (lang) => lang.lang === updatedToLang,
+      );
+      if (toLang == null) return;
+
+      // Check if translation has it, if not, add
+      if (!translations.some((el) => el.toLang === updatedToLang)) {
+        // Check if has previous
+        if (translations.some((el) => el.toLang === lastToLang)) {
+          setTranslations((items) =>
+            items.map((el) =>
+              el.toLang === lastToLang ? newTranslation(updatedToLang) : el,
+            ),
+          );
+        } else {
+          setTranslations((items) => [...items, newTranslation(updatedToLang)]);
         }
-  
-        setLastToLang(updatedToLang);
-      },
-      [lastToLang, translator, translations, setTranslations],
-    );
+      }
+
+      setLastToLang(updatedToLang);
+    },
+    [lastToLang, translator, translations, setTranslations],
+  );
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -103,7 +103,7 @@ function Translator({
       ) : (
         <div className="flex-1 flex flex-col overflow-y-auto">
           <div
-            className={`text-white flex-1 flex flex-col border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}
+            className={`text-white flex-1 flex flex-col rounded-md border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}
           >
             <div className="flex-1 flex flex-col">
               {translations.map((el, index) => (

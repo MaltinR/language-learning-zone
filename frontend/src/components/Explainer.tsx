@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import Button from "./Button";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Dropdown from "./Dropdown";
 import TextDropdown from "./TextDropdown";
 import type IdText from "../interfaces/IdText";
@@ -8,19 +7,10 @@ import type { default as ExplainerType } from "../interfaces/Explainer";
 import axios from "axios";
 import type MessageData from "../interfaces/MessageData";
 import Message from "./Message";
+import type ExplainRequest from "../interfaces/explainer/ExplainRequest";
+import type ExplainResponse from "../interfaces/explainer/ExplainResponse";
+import InputBar from "./InputBar";
 
-interface ExplainResponse {
-  type: "result" | "deltaText";
-  deltaText: string;
-}
-
-interface ExplainRequest {
-  text: string;
-  textLang: string;
-  explainLang: string;
-  promptTemplate: string;
-  history: Array<MessageData>;
-}
 
 async function initFetch(
   setIsInited: React.Dispatch<React.SetStateAction<boolean>>,
@@ -71,8 +61,10 @@ function Explainer({
   text: string;
   fromLangs: Array<Lang>;
   toLangs: Array<Lang>;
-  updatedFromLang: string | null; updatedToLang: string | null
+  updatedFromLang: string | null; 
+  updatedToLang: string | null;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isInited, setIsInited] = useState<boolean>(false);
   const [explainers, setExplainers] = useState<Array<ExplainerType>>([]);
 
@@ -148,7 +140,6 @@ function Explainer({
         let fullText = "";
 
         const handleResponse = (response: ExplainResponse) => {
-          // console.log("Received:", (Date.now() - start).toString(), response);
           if (response.type === "deltaText") {
             fullText += response.deltaText;
             updateText(fullText);
@@ -255,6 +246,13 @@ function Explainer({
     if (toLang == null) return;
     setToLang(toLang);
   }, [setToLang, updatedToLang, toLangs]);
+  
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    el.scrollTop = el.scrollHeight;
+  }, [messages]); // run whenever messages change
 
   return (
     <div className="flex-1 h-full flex flex-col">
@@ -284,13 +282,13 @@ function Explainer({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 flex flex-col overflow-y-auto ">
-        <div className={`text-white flex-1 flex flex-col border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}>
+      <div ref={containerRef} className="flex-1 flex flex-col overflow-y-auto">
+        <div className={`text-white flex-1 flex flex-col rounded-md border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}>
           <div className="flex">
             <div className="flex flex-col flex-1 items-center mx-2 mt-2">
               {/* Messages */}
-              {messages.map((message) => (
-                <Message message={message} />
+              {messages.map((message, index) => (
+                <Message key={index.toString()} message={message} />
               ))}
             </div>
           </div>
@@ -311,45 +309,5 @@ function Explainer({
   );
 }
 
-function InputBar({
-  isInited,
-  isFetching,
-  hasMessages,
-  onNewClick,
-  onTextSend,
-}: {
-  isInited: boolean;
-  isFetching: boolean;
-  hasMessages: boolean;
-  onNewClick: () => void;
-  onTextSend: (text: string) => void;
-}) {
-  const [inputText, setInputText] = useState<string>("");
-
-  const onSendClick = useCallback(() => {
-    onTextSend(inputText);
-    setInputText("");
-  }, [onTextSend, setInputText, inputText]);
-
-  return (
-    <div className="flex-1 w-full text-white flex">
-      {hasMessages ? <Button className="mr-2" onClick={onNewClick}>New</Button> : null}
-      <input
-        type="text"
-        className="focus:outline-none flex-1"
-        placeholder="Ask here"
-        value={inputText}
-        onChange={(e: any) => setInputText(e.target.value)}
-      />
-      <Button
-        disabled={isFetching || !isInited}
-        className=""
-        onClick={onSendClick}
-      >
-        {inputText != null && inputText.length > 0 || hasMessages ? "Send" : "Analyze"}
-      </Button>
-    </div>
-  );
-}
 
 export default Explainer;
