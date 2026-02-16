@@ -13,14 +13,14 @@ function newTranslation(lang: string): Translation {
 
 function Translator({
   translator,
-  fromLang,
+  isSupported,
   toLang,
   isFetching,
   translations,
   setTranslations,
 }: {
   translator: TranslatorType | null;
-  fromLang: Lang | null;
+  isSupported: boolean;
   toLang: Lang | null;
   isFetching: boolean;
   translations: Array<Translation>;
@@ -65,6 +65,7 @@ function Translator({
 
       // Check if translation has it, if not, add
       if (!translations.some((el) => el.toLang === updatedToLang)) {
+
         // Check if has previous
         if (translations.some((el) => el.toLang === lastToLang)) {
           setTranslations((items) =>
@@ -93,7 +94,7 @@ function Translator({
         <div className="text-center font-semibold my-2">Translate</div>
       </div>
 
-      {!translator?.fromLangs.some((el) => el.lang === fromLang?.lang) ? (
+      {!isSupported ? (
         <div className="flex-1 flex p-4 items-center">
           <div className="flex-1 text-stone-500 text-wrap text-center">
             <div>Current translator doesn't support</div>

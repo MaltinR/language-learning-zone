@@ -11,6 +11,7 @@ import type Translator from "../interfaces/Translator";
 import type Explainer from "../interfaces/Explainer";
 import type Lang from "../interfaces/Lang";
 import type MessageData from "../interfaces/MessageData";
+import type Translation from "../interfaces/translator/Translation";
 
 function getDefaultLang(langs: Array<Lang>): Lang {
   return (
@@ -98,6 +99,8 @@ function Mobile({
   );
   const [generatedText, setGeneratedText] = useState<string>("");
   const [targetText, setTargetText] = useState<string>("");
+
+  const [translations, setTranslations] = useState<Array<Translation>>([]);
   const [messages, setMessages] = useState<Array<MessageData>>([]);
 
   const onMainClick = useCallback(() => {
@@ -145,9 +148,11 @@ function Mobile({
             currentSourceProvider={currentSourceProvider}
             currentTranslator={currentTranslator}
             generatedText={generatedText}
-            setGeneratedText={setGeneratedText}
             targetText={targetText}
+            translations={translations}
+            setGeneratedText={setGeneratedText}
             setTargetText={setTargetText}
+            setTranslations={setTranslations}
           />
         );
       case "explain":
@@ -176,6 +181,7 @@ function Mobile({
     currentToLang,
     generatedText,
     targetText,
+    translations,
     messages,
   ]);
 

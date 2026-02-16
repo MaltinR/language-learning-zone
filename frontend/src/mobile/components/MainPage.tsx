@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Button from "../../components/Button";
 import Area from "./Area";
@@ -20,8 +20,10 @@ function MainPage({
   currentTranslator,
   generatedText,
   targetText,
+  translations,
   setGeneratedText,
   setTargetText,
+  setTranslations,
 }: {
   currentFromLang: Lang | null;
   currentToLang: Lang | null;
@@ -29,14 +31,30 @@ function MainPage({
   currentTranslator: TranslatorType | null;
   generatedText: string;
   targetText: string;
+  translations: Array<Translation>;
   setGeneratedText: React.Dispatch<React.SetStateAction<string>>;
   setTargetText: React.Dispatch<React.SetStateAction<string>>;
+  setTranslations: React.Dispatch<React.SetStateAction<Translation[]>>;
 }) {
   const [isNextFetching, setIsNextFetching] = useState<boolean>(false);
   const [isTranslateFetching, setIsTranslateFetching] =
     useState<boolean>(false);
 
-  const [translations, setTranslations] = useState<Array<Translation>>([]);
+  const isSourceProviderSupported = useMemo(() => {
+    return currentSourceProvider?.langs.some((el) => el.lang === currentFromLang?.lang) ?? false
+  }, [currentSourceProvider, currentFromLang])
+
+  const isTranslatorSupported = useMemo(() => {
+    return currentTranslator?.fromLangs.some((el) => el.lang === currentFromLang?.lang) ?? false
+  }, [currentTranslator, currentFromLang])
+
+  const nextClickable = useMemo(() => {
+    return !isNextFetching && isSourceProviderSupported;
+  }, [isNextFetching, isSourceProviderSupported]);
+
+  const translateClickable = useMemo(() => {
+    return !isTranslateFetching && isTranslatorSupported;
+  }, [isTranslateFetching, isTranslatorSupported]);
 
   const onNextClick = useCallback(async () => {
     if (isNextFetching) return;
@@ -108,25 +126,25 @@ function MainPage({
       setIsTranslateFetching(false);
     }
   }, [
+    setTranslations,
+    translations,
     currentFromLang,
     currentTranslator,
     isTranslateFetching,
     targetText,
-    translations,
   ]);
 
   useEffect(() => {
     // TODO: If not copied
     setTargetText(generatedText);
-  }, [setTargetText, generatedText])
+  }, [setTargetText, generatedText]);
 
   return (
     <div className="flex h-full w-full flex-col min-h-0">
       <div className="flex-1 flex flex-col min-h-0">
         <Area className="min-h-2/5">
           <Source
-            sourceProvider={currentSourceProvider}
-            fromLang={currentFromLang}
+            isSupported={isSourceProviderSupported}
             text={generatedText}
             isFetching={isNextFetching}
             setText={setGeneratedText}
@@ -135,7 +153,7 @@ function MainPage({
         <Area className="h-3/5 mt-0 min-h-0">
           <Translator
             translator={currentTranslator}
-            fromLang={currentFromLang}
+            isSupported={isTranslatorSupported}
             toLang={currentToLang}
             isFetching={isTranslateFetching}
             translations={translations}
@@ -145,10 +163,10 @@ function MainPage({
       </div>
       <BottomBar className="mx-1 mb-2">
         <div className="flex-1 flex justify-center items-center h-full">
-          <Button className="flex-1 mx-1 h-full" onClick={onNextClick}>
+          <Button disabled={!nextClickable} className="flex-1 mx-1 h-full" onClick={onNextClick}>
             Next
           </Button>
-          <Button className="flex-1 mx-1 h-full" onClick={onTranslateClick}>
+          <Button disabled={!translateClickable} className="flex-1 mx-1 h-full" onClick={onTranslateClick}>
             Translate
           </Button>
         </div>

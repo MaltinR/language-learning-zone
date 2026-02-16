@@ -13,7 +13,7 @@ function Button({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`bg-emerald-600 py-2 px-4 rounded-md text-black font-bold hover:bg-emerald-700 cursor-pointer focus:outline-none ${className}`}
+      className={`bg-emerald-600 py-2 px-4 rounded-md text-black font-bold disabled:bg-stone-600 hover:bg-emerald-700 cursor-pointer focus:outline-none ${className}`}
     >
       {children}
     </button>

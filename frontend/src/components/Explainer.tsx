@@ -11,12 +11,13 @@ import type ExplainRequest from "../interfaces/explainer/ExplainRequest";
 import type ExplainResponse from "../interfaces/explainer/ExplainResponse";
 import InputBar from "./InputBar";
 
-
 async function initFetch(
   setIsInited: React.Dispatch<React.SetStateAction<boolean>>,
   setExplainers: React.Dispatch<React.SetStateAction<ExplainerType[]>>,
   setPromptTemplate: React.Dispatch<React.SetStateAction<string>>,
-  setCurrentExplainer: React.Dispatch<React.SetStateAction<ExplainerType | null>>,
+  setCurrentExplainer: React.Dispatch<
+    React.SetStateAction<ExplainerType | null>
+  >,
 ) {
   try {
     const [res, promptTemplateRes] = await Promise.all([
@@ -61,7 +62,7 @@ function Explainer({
   text: string;
   fromLangs: Array<Lang>;
   toLangs: Array<Lang>;
-  updatedFromLang: string | null; 
+  updatedFromLang: string | null;
   updatedToLang: string | null;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -71,12 +72,15 @@ function Explainer({
   const [promptTemplate, setPromptTemplate] = useState<string>("");
   const [fromLang, setFromLang] = useState<Lang | null>(fromLangs[0]);
   const [toLang, setToLang] = useState<Lang | null>(toLangs[0]);
-  const [currentExplainer, setCurrentExplainer] = useState<ExplainerType | null>(
-    null,
-  );
+  const [currentExplainer, setCurrentExplainer] =
+    useState<ExplainerType | null>(null);
 
   const [messages, setMessages] = useState<Array<MessageData>>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const isSendable = useMemo<boolean>(() => {
+    return text.length > 0;
+  }, [text]);
 
   const explainerOptions: Array<IdText> = useMemo(() => {
     return explainers.map((explainer) => ({
@@ -96,9 +100,17 @@ function Explainer({
   const explain = useCallback(
     async (text: string, inputText: string) => {
       if (isFetching) return;
-      const freezedMessages : Array<MessageData> = [...messages];
-      if (inputText != null && inputText != "") freezedMessages.push({role: "user", text: inputText});
-      const payloadMessages : Array<MessageData> = inputText != "" ? [...messages, {role: "user", text }, {role: "user", text: inputText}] : [...messages];
+      const freezedMessages: Array<MessageData> = [...messages];
+      if (inputText != null && inputText != "")
+        freezedMessages.push({ role: "user", text: inputText });
+      const payloadMessages: Array<MessageData> =
+        inputText != ""
+          ? [
+              ...messages,
+              { role: "user", text },
+              { role: "user", text: inputText },
+            ]
+          : [...messages];
       // console.log(freezedMessages);
 
       // Debug
@@ -235,18 +247,18 @@ function Explainer({
 
   useEffect(() => {
     if (updatedFromLang == null) return;
-    const fromLang = fromLangs.find(lang => lang.lang === updatedFromLang);
+    const fromLang = fromLangs.find((lang) => lang.lang === updatedFromLang);
     if (fromLang == null) return;
     setFromLang(fromLang);
   }, [setFromLang, updatedFromLang, fromLangs]);
 
   useEffect(() => {
     if (updatedToLang == null) return;
-    const toLang = toLangs.find(lang => lang.lang === updatedToLang);
+    const toLang = toLangs.find((lang) => lang.lang === updatedToLang);
     if (toLang == null) return;
     setToLang(toLang);
   }, [setToLang, updatedToLang, toLangs]);
-  
+
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -283,7 +295,9 @@ function Explainer({
 
       {/* Scrollable content */}
       <div ref={containerRef} className="flex-1 flex flex-col overflow-y-auto">
-        <div className={`text-white flex-1 flex flex-col rounded-md border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}>
+        <div
+          className={`text-white flex-1 flex flex-col rounded-md border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}
+        >
           <div className="flex">
             <div className="flex flex-col flex-1 items-center mx-2 mt-2">
               {/* Messages */}
@@ -298,6 +312,7 @@ function Explainer({
       {/* Footer */}
       <div className="flex px-3 py-3 justify-center mb-1 border-t-2">
         <InputBar
+          isSendable={isSendable}
           isInited={isInited}
           isFetching={isFetching}
           hasMessages={messages.length > 0}
@@ -308,6 +323,5 @@ function Explainer({
     </div>
   );
 }
-
 
 export default Explainer;

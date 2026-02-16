@@ -1,18 +1,14 @@
 import { useCallback, useState } from "react";
 import eyeIcon from "../../assets/eye.svg";
 import penIcon from "../../assets/pen.svg";
-import type SourceProvider from "../../interfaces/SourceProvider";
-import type Lang from "../../interfaces/Lang";
 
 function Source({
-  sourceProvider,
-  fromLang,
+  isSupported,
   isFetching,
   text,
   setText,
 }: {
-  sourceProvider: SourceProvider | null;
-  fromLang: Lang | null;
+  isSupported: boolean;
   isFetching: boolean;
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
@@ -39,7 +35,7 @@ function Source({
         </div>
       </div>
 
-      {!sourceProvider?.langs.some((el) => el.lang === fromLang?.lang) ? (
+      {!isSupported ? (
         <div className="flex-1 flex p-4 items-center">
           <div className="flex-1 text-stone-500 text-wrap text-center">
             <div>Current source doesn't support</div>

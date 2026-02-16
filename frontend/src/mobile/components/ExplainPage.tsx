@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Message from "../../components/Message";
 import type MessageData from "../../interfaces/MessageData";
 import type Explainer from "../../interfaces/Explainer";
@@ -60,6 +60,10 @@ function ExplainPage({
   const [isInited, setIsInited] = useState<boolean>(false);
   const [promptTemplate, setPromptTemplate] = useState<string>("");
   const [isFetching, setIsFetching] = useState<boolean>(false);
+
+  const isSendable = useMemo(() => {
+    return text.length > 0;
+  }, [text]);
 
   const explain = useCallback(
     async (text: string, inputText: string) => {
@@ -215,6 +219,7 @@ function ExplainPage({
       <BottomBar className="mx-2 mb-2">
         <InputBar
           className="h-full"
+          isSendable={isSendable}
           isInited={isInited}
           isFetching={isFetching}
           hasMessages={messages.length > 0}

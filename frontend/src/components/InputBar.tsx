@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import Button from "./Button";
 
 function InputBar({
+    isSendable,
   isInited,
   isFetching,
   hasMessages,
@@ -10,6 +11,7 @@ function InputBar({
   className,
   buttonClassName,
 }: {
+    isSendable: boolean;
   isInited: boolean;
   isFetching: boolean;
   hasMessages: boolean;
@@ -27,7 +29,7 @@ function InputBar({
 
   return (
     <div className={`flex-1 w-full text-white flex ${className}`}>
-      {hasMessages ? <Button className={`mr-2 h-full ${buttonClassName}`} onClick={onNewClick}>New</Button> : null}
+      {hasMessages ? <Button disabled={isFetching} className={`mr-2 h-full ${buttonClassName}`} onClick={onNewClick}>New</Button> : null}
       <input
         type="text"
         className="focus:outline-none flex-1"
@@ -36,7 +38,7 @@ function InputBar({
         onChange={(e: any) => setInputText(e.target.value)}
       />
       <Button
-        disabled={isFetching || !isInited}
+        disabled={isSendable && (isFetching || !isInited)}
         className={`ml-2 h-full ${buttonClassName}`}
         onClick={onSendClick}
       >
