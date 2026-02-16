@@ -4,14 +4,10 @@ import Dropdown from "./Dropdown";
 import TextDropdown from "./TextDropdown";
 import type IdText from "../interfaces/IdText";
 import type Lang from "../interfaces/Lang";
+import type Explainer from "../interfaces/Explainer";
 import axios from "axios";
 import type MessageData from "../interfaces/MessageData";
 import Message from "./Message";
-
-interface Explainer {
-  id: string;
-  name: string;
-}
 
 interface ExplainResponse {
   type: "result" | "deltaText";

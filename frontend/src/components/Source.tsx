@@ -6,6 +6,7 @@ import type IdText from "../interfaces/IdText";
 import type Lang from "../interfaces/Lang";
 import eyeIcon from "../assets/eye.svg";
 import penIcon from "../assets/pen.svg";
+import type SourceProvider from "../interfaces/SourceProvider";
 
 async function initFetch(
   setSourceProviders: React.Dispatch<React.SetStateAction<SourceProvider[]>>,
@@ -25,12 +26,6 @@ async function initFetch(
   } catch (err: any) {
     console.error(err);
   }
-}
-
-interface SourceProvider {
-  id: string;
-  name: string;
-  langs: Array<Lang>;
 }
 
 interface NextRequest {

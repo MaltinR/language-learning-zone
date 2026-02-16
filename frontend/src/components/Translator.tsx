@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Dropdown from "./Dropdown";
 import type Lang from "../interfaces/Lang";
 import type IdText from "../interfaces/IdText";
+import type Translator from "../interfaces/Translator";
 import axios from "axios";
 import Button from "./Button";
 import TranslationRow from "./TranslationRow";
@@ -32,13 +33,6 @@ function newTranslation(lang: string): Translation {
     toLang: lang,
     translation: "",
   };
-}
-
-interface Translator {
-  id: string;
-  name: string;
-  fromLangs: Array<Lang>;
-  toLangs: Array<Lang>;
 }
 
 interface Translation {
