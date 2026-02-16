@@ -7,6 +7,8 @@ import type Lang from "../interfaces/Lang";
 import eyeIcon from "../assets/eye.svg";
 import penIcon from "../assets/pen.svg";
 import type SourceProvider from "../interfaces/SourceProvider";
+import type NextRequest from "../interfaces/source/NextRequest";
+import type NextResponse from "../interfaces/source/NextResponse";
 
 async function initFetch(
   setSourceProviders: React.Dispatch<React.SetStateAction<SourceProvider[]>>,
@@ -26,21 +28,6 @@ async function initFetch(
   } catch (err: any) {
     console.error(err);
   }
-}
-
-interface NextRequest {
-  lang: string;
-}
-
-interface NextResponse {
-  input: {
-    lang: string;
-  };
-  sourceProvider: {
-    id: string;
-    name: string;
-  };
-  result: string;
 }
 
 function Source({

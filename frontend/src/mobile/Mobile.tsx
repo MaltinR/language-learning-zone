@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type SetStateAction } from "react";
 import MainContent from "./components/MainContent";
 import TopBar from "./components/TopBar";
 import type { PageType } from "./types/PageType";
@@ -9,6 +9,7 @@ import type SourceProvider from "../interfaces/SourceProvider";
 import type Translator from "../interfaces/Translator";
 import type Explainer from "../interfaces/Explainer";
 import axios from "axios";
+import type Lang from "../interfaces/Lang";
 
 async function fetchSourceProviders(
   setSourceProviders: React.Dispatch<React.SetStateAction<SourceProvider[]>>,
@@ -69,6 +70,10 @@ function Mobile() {
     null,
   );
 
+  const [currentFromLang, setCurrentFromLang] = useState<Lang | null>(null);
+  const [currentToLang, setCurrentToLang] = useState<Lang | null>(null);
+  const [generatedText, setGeneratedText] = useState<string>("");
+
   const onMainClick = useCallback(() => {
     setIsSetting(false);
     setPageType("main");
@@ -107,7 +112,7 @@ function Mobile() {
       );
     switch (pageType) {
       case "main":
-        return <MainPage />;
+        return <MainPage currentFromLang={currentFromLang?.lang ?? null} currentToLang={currentToLang?.lang ?? null} currentSourceProviderId={currentSourceProvider?.id ?? ""} generatedText={generatedText} setGeneratedText={setGeneratedText} />;
       case "explain":
         return <ExplainPage />;
     }
@@ -121,6 +126,9 @@ function Mobile() {
     currentSourceProvider,
     currentTranslator,
     currentExplainer,
+    currentFromLang,
+    currentToLang,
+    generatedText,
   ]);
 
   useEffect(() => {
