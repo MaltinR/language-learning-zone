@@ -2,27 +2,29 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Dropdown from "./Dropdown";
 import type Lang from "../interfaces/Lang";
 import type IdText from "../interfaces/IdText";
-import type Translator from "../interfaces/Translator";
+import type { default as TranslatorType } from "../interfaces/Translator";
 import axios from "axios";
 import Button from "./Button";
 import TranslationRow from "./TranslationRow";
 import TextDropdown from "./TextDropdown";
+import type Translation from "../interfaces/translator/Translation";
+import type TranslateResponse from "../interfaces/translator/TranslateResponse";
 
 async function initFetch(
-  setTranslators: React.Dispatch<React.SetStateAction<Translator[]>>,
-  setCurrentTranslator: React.Dispatch<React.SetStateAction<Translator | null>>,
-  // setFromLangs: React.Dispatch<React.SetStateAction<Array<Lang>>>,
-  // setToLangs: React.Dispatch<React.SetStateAction<Array<Lang>>>,
+  setTranslators: React.Dispatch<React.SetStateAction<TranslatorType[]>>,
+  setCurrentTranslator: React.Dispatch<React.SetStateAction<TranslatorType | null>>,
 ) {
   try {
     const res = await axios.get("/api/translators");
-    // console.log(res.data);
-    const translators: Array<Translator> = res.data;
+    const rawTranslators: Array<TranslatorType> = res.data;
+    const translators: Array<TranslatorType> = rawTranslators.map(el => ({
+      ...el,
+      fromLangs: el.fromLangs.sort((a, b) => a.name.localeCompare(b.name)),
+      toLangs: el.toLangs.sort((a, b) => a.name.localeCompare(b.name)),
+    }));
     const translator = translators[0];
     setTranslators(translators);
     setCurrentTranslator(translator);
-    // setFromLangs(translator.fromLangs);
-    // setToLangs(translator.toLangs);
   } catch (err: any) {
     console.error(err);
   }
@@ -35,15 +37,6 @@ function newTranslation(lang: string): Translation {
   };
 }
 
-interface Translation {
-  toLang: string;
-  translation: string;
-}
-
-interface TranslateResponse {
-  result: string;
-}
-
 function Translator({
   text,
   updatedFromLang,
@@ -53,12 +46,12 @@ function Translator({
   updatedFromLang: string | null;
   updatedToLang: string | null;
 }) {
-  const [translators, setTranslators] = useState<Array<Translator>>([]);
+  const [translators, setTranslators] = useState<Array<TranslatorType>>([]);
   const [fromLangs, setFromLangs] = useState<Array<Lang>>([]);
   const [toLangs, setToLangs] = useState<Array<Lang>>([]);
 
   const [isFetching, setIsFetching] = useState<boolean>(false);
-  const [currentTranslator, setCurrentTranslator] = useState<Translator | null>(
+  const [currentTranslator, setCurrentTranslator] = useState<TranslatorType | null>(
     null,
   );
   const [fromLang, setFromLang] = useState<Lang | null>(null);
@@ -91,7 +84,7 @@ function Translator({
     if (isFetching || text === "") return;
     try {
       setIsFetching(true);
-      // TODO: Execute translate
+      // Execute translate
       const translationResponses = await Promise.all(
         translations.map((el) => {
           const body = {
@@ -108,7 +101,6 @@ function Translator({
       );
       const newTranslations: Array<Translation> = translationResponses.map(
         (res, i) => {
-          // console.log(res.data);
           const data: TranslateResponse = res.data;
           return {
             toLang: translations.find((_, index) => index === i)!.toLang,
@@ -159,9 +151,6 @@ function Translator({
 
   const onButtonClick = useCallback(() => {
     setTranslations((translators) => {
-      // console.log(
-      //   `Next: ${toLangs.find((lang) => !inUseToLangs.includes(lang.lang))!.lang}`,
-      // );
       return [
         ...translators,
         {
@@ -247,12 +236,12 @@ function Translator({
           className={`text-white flex-1 flex flex-col border-2 ${isFetching ? "border-emerald-600" : "border-stone-900"}`}
         >
           <div className="flex flex-col flex-1 items-center mx-2 mt-2">
-            {translations.map((_, index) => (
+            {translations.map((el, index) => (
               <TranslationRow
                 key={index}
                 options={toLangOptions}
-                value={translations[index].toLang}
-                translation={translations[index].translation}
+                value={el.toLang}
+                translation={el.translation}
                 onSelect={(lang) => {
                   setTranslations((translators) =>
                     translators.map((el, i) =>

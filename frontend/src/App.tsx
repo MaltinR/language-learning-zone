@@ -17,7 +17,7 @@ async function initFetch(
   try {
     const res = await axios.get("/api/langs");
     const data: Array<Lang> = res.data;
-    setCommonLangs(data);
+    setCommonLangs(data.sort((a, b) => a.name.localeCompare(b.name)));
     setIsInited(true);
   } catch (err: any) {
     console.error(err);
@@ -75,7 +75,7 @@ function App() {
   return (
     <>
       {isMobile ? (
-        <Mobile />
+        <Mobile fromLangs={commonLangs} toLangs={commonLangs} />
       ) : (
         <div
           onMouseUp={onMouseUp}

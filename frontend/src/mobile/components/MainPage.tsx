@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import axios from "axios";
 import Button from "../../components/Button";
 import Area from "./Area";
 import BottomBar from "./BottomBar";
@@ -6,24 +7,36 @@ import Source from "./Source";
 import Translator from "./Translator";
 import type NextRequest from "../../interfaces/source/NextRequest";
 import type NextResponse from "../../interfaces/source/NextResponse";
-import axios from "axios";
+import type Translation from "../../interfaces/translator/Translation";
+import type Lang from "../../interfaces/Lang";
+import type TranslateResponse from "../../interfaces/translator/TranslateResponse";
+import type SourceProvider from "../../interfaces/SourceProvider";
+import type { default as TranslatorType } from "../../interfaces/Translator";
 
 function MainPage({
   currentFromLang,
   currentToLang,
-  currentSourceProviderId,
+  currentSourceProvider,
+  currentTranslator,
   generatedText,
+  targetText,
   setGeneratedText,
+  setTargetText,
 }: {
-  currentFromLang: string | null;
-  currentToLang: string | null;
-  currentSourceProviderId: string;
+  currentFromLang: Lang | null;
+  currentToLang: Lang | null;
+  currentSourceProvider: SourceProvider | null;
+  currentTranslator: TranslatorType | null;
   generatedText: string;
+  targetText: string;
   setGeneratedText: React.Dispatch<React.SetStateAction<string>>;
+  setTargetText: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [isNextFetching, setIsNextFetching] = useState<boolean>(false);
   const [isTranslateFetching, setIsTranslateFetching] =
     useState<boolean>(false);
+
+  const [translations, setTranslations] = useState<Array<Translation>>([]);
 
   const onNextClick = useCallback(async () => {
     if (isNextFetching) return;
@@ -31,10 +44,10 @@ function MainPage({
       setIsNextFetching(true);
 
       const body: NextRequest = {
-        lang: currentFromLang ?? "en",
+        lang: currentFromLang?.lang ?? "en",
       };
       const res = await axios.post(
-        `/api/sourceProviders/${currentSourceProviderId}/next`,
+        `/api/sourceProviders/${currentSourceProvider!.id}/next`,
         body,
       );
       const data: NextResponse = res.data;
@@ -44,18 +57,85 @@ function MainPage({
     } finally {
       setIsNextFetching(false);
     }
-  }, [setGeneratedText, currentFromLang, currentSourceProviderId, isNextFetching]);
+  }, [
+    setGeneratedText,
+    currentFromLang,
+    currentSourceProvider,
+    isNextFetching,
+  ]);
 
-  const onTranslateClick = useCallback(() => {}, []);
+  const onTranslateClick = useCallback(async () => {
+    if (isTranslateFetching) return;
+    try {
+      setIsTranslateFetching(true);
+      // Execute translate
+      const translationResponses = await Promise.all(
+        translations.map((el) => {
+          const body = {
+            targetText,
+            fromLang: currentFromLang!.lang,
+            toLang: el.toLang,
+          };
+          return axios.post(
+            `/api/translators/${currentTranslator!.id}/translate`,
+            body,
+          );
+        }),
+      );
+      const newTranslations: Array<Translation> = translationResponses.map(
+        (res, i) => {
+          // console.log(res.data);
+          const data: TranslateResponse = res.data;
+          return {
+            toLang: translations.find((_, index) => index === i)!.toLang,
+            translation: data.result,
+          };
+        },
+      );
+      setTranslations((_translations) =>
+        _translations.map((item) => {
+          return {
+            ...item,
+            translation:
+              newTranslations.find((el) => el.toLang === item.toLang)
+                ?.translation ?? "",
+          };
+        }),
+      );
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setIsTranslateFetching(false);
+    }
+  }, [
+    currentFromLang,
+    currentTranslator,
+    isTranslateFetching,
+    targetText,
+    translations,
+  ]);
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <div className="flex-1 flex flex-col">
-        <Area className="h-2/5">
-          <Source text={generatedText} isFetching={isNextFetching} setText={setGeneratedText} />
+    <div className="flex h-full w-full flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0">
+        <Area className="min-h-2/5">
+          <Source
+            sourceProvider={currentSourceProvider}
+            fromLang={currentFromLang}
+            text={generatedText}
+            isFetching={isNextFetching}
+            setText={setGeneratedText}
+          />
         </Area>
-        <Area className="h-3/5 mt-0">
-          <Translator />
+        <Area className="h-3/5 mt-0 min-h-0">
+          <Translator
+            translator={currentTranslator}
+            fromLang={currentFromLang}
+            toLang={currentToLang}
+            isFetching={isTranslateFetching}
+            translations={translations}
+            setTranslations={setTranslations}
+          />
         </Area>
       </div>
       <BottomBar className="mx-1 mb-2">

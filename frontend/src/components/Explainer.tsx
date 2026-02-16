@@ -4,7 +4,7 @@ import Dropdown from "./Dropdown";
 import TextDropdown from "./TextDropdown";
 import type IdText from "../interfaces/IdText";
 import type Lang from "../interfaces/Lang";
-import type Explainer from "../interfaces/Explainer";
+import type { default as ExplainerType } from "../interfaces/Explainer";
 import axios from "axios";
 import type MessageData from "../interfaces/MessageData";
 import Message from "./Message";
@@ -24,16 +24,16 @@ interface ExplainRequest {
 
 async function initFetch(
   setIsInited: React.Dispatch<React.SetStateAction<boolean>>,
-  setExplainers: React.Dispatch<React.SetStateAction<Explainer[]>>,
+  setExplainers: React.Dispatch<React.SetStateAction<ExplainerType[]>>,
   setPromptTemplate: React.Dispatch<React.SetStateAction<string>>,
-  setCurrentExplainer: React.Dispatch<React.SetStateAction<Explainer | null>>,
+  setCurrentExplainer: React.Dispatch<React.SetStateAction<ExplainerType | null>>,
 ) {
   try {
     const [res, promptTemplateRes] = await Promise.all([
       axios.get("/api/explainers"),
       axios.get("/api/explainers/promptTemplate"),
     ]);
-    const explainers: Array<Explainer> = res.data;
+    const explainers: Array<ExplainerType> = res.data;
     const promptTemplate = promptTemplateRes.data.result;
 
     setExplainers(explainers);
@@ -74,12 +74,12 @@ function Explainer({
   updatedFromLang: string | null; updatedToLang: string | null
 }) {
   const [isInited, setIsInited] = useState<boolean>(false);
-  const [explainers, setExplainers] = useState<Array<Explainer>>([]);
+  const [explainers, setExplainers] = useState<Array<ExplainerType>>([]);
 
   const [promptTemplate, setPromptTemplate] = useState<string>("");
   const [fromLang, setFromLang] = useState<Lang | null>(fromLangs[0]);
   const [toLang, setToLang] = useState<Lang | null>(toLangs[0]);
-  const [currentExplainer, setCurrentExplainer] = useState<Explainer | null>(
+  const [currentExplainer, setCurrentExplainer] = useState<ExplainerType | null>(
     null,
   );
 

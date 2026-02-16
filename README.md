@@ -11,13 +11,13 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] Handling change provider
 - [x] Github models as explainer
 - [x] Wikipedia random as source
-- [ ] Languages order by alphabet
+- [x] Languages order by alphabet
 
 ## Roadmap
 - [x] Standardize basic lang code
 - [x] Web frontend
 - [x] Docker support
-- [ ] Mobile web UI
+- [x] Mobile web UI
 - [ ] Native TTS support
 
 ## Provider

@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState, type SetStateAction } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type SetStateAction,
+} from "react";
 import MainContent from "./components/MainContent";
 import TopBar from "./components/TopBar";
 import type { PageType } from "./types/PageType";
@@ -11,9 +17,20 @@ import type Explainer from "../interfaces/Explainer";
 import axios from "axios";
 import type Lang from "../interfaces/Lang";
 
+function getDefaultLang(langs: Array<Lang>): Lang {
+  return (
+    langs.find((lang) => lang.lang == "en") ??
+    langs.find((lang) => lang.lang.startsWith("en")) ??
+    langs[0]
+  );
+}
+
 async function fetchSourceProviders(
   setSourceProviders: React.Dispatch<React.SetStateAction<SourceProvider[]>>,
-  setCurrentSourceProvider: React.Dispatch<React.SetStateAction<SourceProvider | null>>) {
+  setCurrentSourceProvider: React.Dispatch<
+    React.SetStateAction<SourceProvider | null>
+  >,
+) {
   try {
     const res = await axios.get("/api/sourceProviders");
     const providers: Array<SourceProvider> = res.data;
@@ -26,7 +43,8 @@ async function fetchSourceProviders(
 }
 async function fetchTranslators(
   setTranslators: React.Dispatch<React.SetStateAction<Translator[]>>,
-  setCurrentTranslator: React.Dispatch<React.SetStateAction<Translator | null>>) {
+  setCurrentTranslator: React.Dispatch<React.SetStateAction<Translator | null>>,
+) {
   try {
     const res = await axios.get("/api/translators");
     const translators: Array<Translator> = res.data;
@@ -39,7 +57,8 @@ async function fetchTranslators(
 }
 async function fetchExplainers(
   setExplainers: React.Dispatch<React.SetStateAction<Explainer[]>>,
-  setCurrentExplainer: React.Dispatch<React.SetStateAction<Explainer | null>>) {
+  setCurrentExplainer: React.Dispatch<React.SetStateAction<Explainer | null>>,
+) {
   try {
     const res = await axios.get("/api/explainers");
     const explainers: Array<Explainer> = res.data;
@@ -51,7 +70,13 @@ async function fetchExplainers(
   }
 }
 
-function Mobile() {
+function Mobile({
+  fromLangs,
+  toLangs,
+}: {
+  fromLangs: Array<Lang>;
+  toLangs: Array<Lang>;
+}) {
   const [pageType, setPageType] = useState<PageType>("main");
   const [isSetting, setIsSetting] = useState<boolean>(false);
 
@@ -70,9 +95,14 @@ function Mobile() {
     null,
   );
 
-  const [currentFromLang, setCurrentFromLang] = useState<Lang | null>(null);
-  const [currentToLang, setCurrentToLang] = useState<Lang | null>(null);
+  const [currentFromLang, setCurrentFromLang] = useState<Lang | null>(
+    getDefaultLang(fromLangs),
+  );
+  const [currentToLang, setCurrentToLang] = useState<Lang | null>(
+    getDefaultLang(toLangs),
+  );
   const [generatedText, setGeneratedText] = useState<string>("");
+  const [targetText, setTargetText] = useState<string>("");
 
   const onMainClick = useCallback(() => {
     setIsSetting(false);
@@ -112,23 +142,35 @@ function Mobile() {
       );
     switch (pageType) {
       case "main":
-        return <MainPage currentFromLang={currentFromLang?.lang ?? null} currentToLang={currentToLang?.lang ?? null} currentSourceProviderId={currentSourceProvider?.id ?? ""} generatedText={generatedText} setGeneratedText={setGeneratedText} />;
+        return (
+          <MainPage
+            currentFromLang={currentFromLang}
+            currentToLang={currentToLang}
+            currentSourceProvider={currentSourceProvider}
+            currentTranslator={currentTranslator}
+            generatedText={generatedText}
+            setGeneratedText={setGeneratedText}
+            targetText={targetText}
+            setTargetText={setTargetText}
+          />
+        );
       case "explain":
         return <ExplainPage />;
     }
   }, [
-    onDoneClick,
-    pageType,
     isSetting,
+    onDoneClick,
     sourceProviders,
     translators,
     explainers,
     currentSourceProvider,
     currentTranslator,
     currentExplainer,
+    pageType,
     currentFromLang,
     currentToLang,
     generatedText,
+    targetText,
   ]);
 
   useEffect(() => {
@@ -145,6 +187,12 @@ function Mobile() {
         onMainClick={onMainClick}
         onSettingClick={onSettingClick}
         onExplainClick={onExplainClick}
+        fromLangs={fromLangs}
+        toLangs={toLangs}
+        fromLang={currentFromLang}
+        toLang={currentToLang}
+        setFromLang={setCurrentFromLang}
+        setToLang={setCurrentToLang}
       />
       <MainContent>{page}</MainContent>
     </div>

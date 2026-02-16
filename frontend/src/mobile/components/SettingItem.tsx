@@ -25,7 +25,7 @@ function SettingItem({
     <div className="w-full border-2 border-stone-700 rounded-md m-1 flex px-4 py-2 items-center">
       <div className="flex-1 font-bold">{title}</div>
       <select
-        className="min-w-30 px-4 py-2 text-end"
+        className="min-w-30 px-4 py-2 text-end bg-stone-900 rounded focus:outline-none"
         value={value}
         onChange={(e) => setter(e.target.value)}
       >

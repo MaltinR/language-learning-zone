@@ -19,12 +19,14 @@ async function initFetch(
 ) {
   try {
     const res = await axios.get("/api/sourceProviders");
-    // console.log(res.data);
-    const providers: Array<SourceProvider> = res.data;
+    const rawProviders: Array<SourceProvider> = res.data;
+    const providers: Array<SourceProvider> = rawProviders.map(el => ({
+      ...el,
+      langs: el.langs.sort((a, b) => a.name.localeCompare(b.name)),
+    }));
     setSourceProviders(providers);
     const currentProvider = providers[0];
     setCurrentSourceProvider(currentProvider);
-    // setLangs(currentProvider.langs);
   } catch (err: any) {
     console.error(err);
   }
