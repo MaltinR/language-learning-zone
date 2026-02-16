@@ -12,6 +12,8 @@ Language Learning Zone simplifies the flow of learning languages. You no longer 
 - [x] Github models as explainer
 - [x] Wikipedia random as source
 - [x] Languages order by alphabet
+- [ ] Support table
+- [ ] Better prompt template
 
 ## Roadmap
 - [x] Standardize basic lang code
