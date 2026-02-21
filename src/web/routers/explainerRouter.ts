@@ -36,11 +36,14 @@ export default function explainerRouter() {
 
   router.post("/:id/explain", async (req: Request, res: Response) => {
     try {
+      console.log("/:id/explain called");
       const id: string = req.params.id as string;
       const body: ExplainRequest = req.body;
       if (body == null) {
         return res.status(400).json({ error: "Invalid body" });
       }
+
+      console.log(body);
 
       let isFirst = true;
       const onTextUpdate = (deltaText: string) => {
