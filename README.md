@@ -5,7 +5,7 @@
 Language Learning Zone simplifies the flow of learning languages. You no longer need to find text from outside and search it accross different websites and applications. It intergrates into one web app. You can also implement your own provider on source, translator, or explainer.
 
 ## To-do
-- [ ] Fix bug in explainer about lang as name
+- [x] Fix bug in explainer about lang as name
 - [ ] Support table
 
 ## Roadmap
