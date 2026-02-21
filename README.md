@@ -5,15 +5,8 @@
 Language Learning Zone simplifies the flow of learning languages. You no longer need to find text from outside and search it accross different websites and applications. It intergrates into one web app. You can also implement your own provider on source, translator, or explainer.
 
 ## To-do
-- [x] Fix streaming laggy problem
-- [x] DeepL supports english
-- [x] Google translate as translator
-- [x] Handling change provider
-- [x] Github models as explainer
-- [x] Wikipedia random as source
-- [x] Languages order by alphabet
+- [ ] Fix bug in explainer about lang as name
 - [ ] Support table
-- [ ] Better prompt template
 
 ## Roadmap
 - [x] Standardize basic lang code

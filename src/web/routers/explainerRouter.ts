@@ -6,6 +6,7 @@ import type ExplainRequest from "../interfaces/ExplainRequest";
 import type ExplainResponse from "../interfaces/ExplainResponse";
 import type PromptTemplateResponse from "../interfaces/PromptTemplateResponse";
 import GithubModels from "../../explainers/GithubModels";
+import { commonLangs } from "../../langCodes/CommonLangs";
 
 const explainers: Array<Explainer> = [new GeminiRest(true), new GithubModels(true)];
 const explainerMap = explainers.reduce<Record<string, Explainer>>(
@@ -51,10 +52,14 @@ export default function explainerRouter() {
       };
 
       const explainer = explainerMap[id];
+
+      const textLanguage = commonLangs.find(lang => lang.lang === body.textLang)!.name;
+      const explainLanguage = commonLangs.find(lang => lang.lang === body.explainLang)!.name;
+
       const explanation = await explainer!.explain(
         body.text,
-        body.textLang,
-        body.explainLang,
+        textLanguage,
+        explainLanguage,
         body.promptTemplate,
         body.history,
         onTextUpdate,
