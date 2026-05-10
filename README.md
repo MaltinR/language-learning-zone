@@ -47,6 +47,9 @@ Fill in data in .env file, e.g. api key
 cd ./frontend
 bun install
 
+# build the frontend
+bun run build
+
 # install server dependencies
 cd .. 
 bun install
